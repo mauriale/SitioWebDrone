@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Servicios de Piloto de Drone</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
+      color: white;
+    }
+
+    .video-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .video-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .content {
+      position: relative;
+      min-height: 100vh;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 20px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    .menu-btn {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px 0;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    .tagline {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    }
+
+    .cta-button {
+      background-color: #FF6B00;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .cta-button:hover {
+      background-color: #FF8F3F;
+      transform: translateY(-3px);
+    }
+
+    .services {
+      margin-top: 40px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+    }
+
+    .service-card {
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      transition: transform 0.3s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+
+    .service-title {
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+    }
+
+    .service-description {
+      font-size: 0.9rem;
+      color: #e0e0e0;
+    }
+
+    footer {
+      margin-top: 40px;
+      text-align: center;
+      padding: 20px 0;
+      font-size: 0.9rem;
+      color: #cccccc;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .social-link {
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    @keyframes flyIn {
+      0% {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-in {
+      animation: flyIn 1s forwards;
+    }
+
+    .delay-1 {
+      animation-delay: 0.2s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.4s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.6s;
+    }
+
+    /* Media query for larger mobile devices */
+    @media (min-width: 480px) {
+      .services {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <!-- Reemplaza "tu-video-drone.mp4" con el nombre real de tu archivo -->
+    <video autoplay muted loop playsinline class="video-background">
+      <source src="tu-video-drone.mp4" type="video/mp4">
+      <!-- Imagen de respaldo en caso de que el video no cargue -->
+      <img src="/api/placeholder/480/800" alt="Vista aérea desde un drone" class="video-background">
+    </video>
+  </div>
+
+  <div class="content">
+    <header>
+      <div class="logo">DroneVista</div>
+      <button class="menu-btn">☰</button>
+    </header>
+
+    <section class="hero">
+      <h1 class="animate-in">Servicios Profesionales de Piloto de Drone</h1>
+      <p class="tagline animate-in delay-1">Capturando perspectivas únicas desde el cielo</p>
+      <button class="cta-button animate-in delay-2">Contactar Ahora</button>
+    </section>
+
+    <section class="services">
+      <div class="service-card animate-in delay-3">
+        <div class="service-icon">🏔️</div>
+        <h3 class="service-title">Filmación en Montaña</h3>
+        <p class="service-description">Tomas espectaculares de paisajes montañosos, senderos y actividades al aire libre desde ángulos imposibles.</p>
+      </div>
+
+      <div class="service-card animate-in delay-3">
+        <div class="service-icon">🏖️</div>
+        <h3 class="service-title">Filmación en Playa</h3>
+        <p class="service-description">Imágenes aéreas impresionantes de costas, olas y eventos playeros con perspectivas únicas.</p>
+      </div>
+
+      <div class="service-card animate-in delay-3">
+        <div class="service-icon">🎬</div>
+        <h3 class="service-title">Producción Audiovisual</h3>
+        <p class="service-description">Servicios completos de filmación, edición y posproducción para crear contenido de alta calidad.</p>
+      </div>
+
+      <div class="service-card animate-in delay-3">
+        <div class="service-icon">🏢</div>
+        <h3 class="service-title">Servicios Corporativos</h3>
+        <p class="service-description">Filmación para empresas, publicidad, eventos y proyectos especiales con tecnología de punta.</p>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2025 DroneVista. Todos los derechos reservados.</p>
+      <div class="social-links">
+        <a href="#" class="social-link">📱</a>
+        <a href="#" class="social-link">📷</a>
+        <a href="#" class="social-link">📹</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Función para simular el efecto de vuelo del drone
+      function simulateDroneFlight() {
+        const videoBackground = document.querySelector('.video-background');
+        let posX = 0;
+        let posY = 0;
+        let directionX = 1;
+        let directionY = 1;
+        
+        setInterval(() => {
+          // Cambiar dirección aleatoriamente
+          if (Math.random() > 0.95) directionX *= -1;
+          if (Math.random() > 0.95) directionY *= -1;
+          
+          // Actualizar posición
+          posX += directionX * 0.1;
+          posY += directionY * 0.1;
+          
+          // Limitar el movimiento
+          posX = Math.max(-5, Math.min(5, posX));
+          posY = Math.max(-5, Math.min(5, posY));
+          
+          // Aplicar transformación
+          videoBackground.style.transform = `translate(${posX}px, ${posY}px) scale(1.1)`;
+        }, 50);
+      }
+      
+      // Iniciar efecto de vuelo
+      simulateDroneFlight();
+      
+      // Manejar el botón de menú
+      const menuBtn = document.querySelector('.menu-btn');
+      menuBtn.addEventListener('click', function() {
+        alert('Menú en desarrollo');
+      });
+      
+      // Manejar el botón de llamada a la acción
+      const ctaButton = document.querySelector('.cta-button');
+      ctaButton.addEventListener('click', function() {
+        alert('¡Gracias por tu interés! Pronto te contactaremos.');
+      });
+    });
+  </script>
+</body>
+</html>
