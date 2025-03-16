@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel de Administración - DroneVista</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #FF6B00;
+      --secondary-color: #333;
+      --dark-bg: #1a1a1a;
+      --light-text: #f5f5f5;
+      --card-bg: #2a2a2a;
+    }
+
+    body {
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .navbar {
+      background-color: var(--secondary-color);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .navbar-brand {
+      color: var(--primary-color);
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .nav-link {
+      color: var(--light-text);
+    }
+
+    .nav-link.active {
+      color: var(--primary-color) !important;
+      font-weight: bold;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: none;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    .card-header {
+      background-color: rgba(255, 107, 0, 0.2);
+      border-bottom: 1px solid rgba(255, 107, 0, 0.3);
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+
+    .table {
+      color: var(--light-text);
+    }
+
+    .table th {
+      border-color: #444;
+    }
+
+    .table td {
+      border-color: #333;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+      background-color: #FF8F3F;
+      border-color: #FF8F3F;
+    }
+
+    .status-confirmed {
+      color: #4CAF50;
+      font-weight: bold;
+    }
+
+    .status-pending {
+      color: #FFC107;
+      font-weight: bold;
+    }
+
+    .status-cancelled {
+      color: #F44336;
+      font-weight: bold;
+    }
+
+    .service-icon {
+      font-size: 2rem;
+      display: inline-block;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+
+    #serviceDetails, #bookingDetails {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">DroneVista Admin</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="#" id="bookingsTab">Reservas</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#" id="servicesTab">Servicios</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="../index.html" target="_blank">Ver sitio web</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4">
+    <!-- Sección de Reservas -->
+    <div id="bookingsSection">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gestión de Reservas</h2>
+        <button class="btn btn-primary" onclick="refreshBookings()">
+          <i class="bi bi-arrow-clockwise"></i> Actualizar
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          Lista de Reservas
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Servicio</th>
+                  <th>Fecha</th>
+                  <th>Estado</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="bookingsTableBody">
+                <!-- Se llenará con JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detalles de Reserva -->
+      <div class="card" id="bookingDetails">
+        <div class="card-header">
+          Detalles de la Reserva
+        </div>
+        <div class="card-body">
+          <div id="bookingDetailsContent">
+            <!-- Se llenará con JavaScript -->
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-primary" onclick="updateBookingStatus('confirmado')">Confirmar</button>
+            <button class="btn btn-warning" onclick="updateBookingStatus('pendiente')">Pendiente</button>
+            <button class="btn btn-danger" onclick="updateBookingStatus('cancelado')">Cancelar</button>
+            <button class="btn btn-secondary" onclick="hideBookingDetails()">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de Servicios -->
+    <div id="servicesSection" style="display: none;">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Gestión de Servicios</h2>
+        <button class="btn btn-primary" onclick="refreshServices()">
+          <i class="bi bi-arrow-clockwise"></i> Actualizar
+        </button>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          Lista de Servicios
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Servicio</th>
+                  <th>Precio/Hora</th>
+                  <th>Duración</th>
+                  <th>Acción</th>
+                </tr>
+              </thead>
+              <tbody id="servicesTableBody">
+                <!-- Se llenará con JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detalles de Servicio -->
+      <div class="card" id="serviceDetails">
+        <div class="card-header">
+          Detalles del Servicio
+        </div>
+        <div class="card-body">
+          <div id="serviceDetailsContent">
+            <!-- Se llenará con JavaScript -->
+          </div>
+          <div class="mt-3">
+            <button class="btn btn-secondary" onclick="hideServiceDetails()">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Variables globales
+    let services = [];
+    let bookings = [];
+    let currentBookingId = null;
+    let currentServiceId = null;
+
+    // Al cargar la página
+    document.addEventListener('DOMContentLoaded', function() {
+      // Cargar datos iniciales
+      fetchServices();
+      fetchBookings();
+
+      // Configurar tabs
+      document.getElementById('bookingsTab').addEventListener('click', function(e) {
+        e.preventDefault();
+        showBookingsSection();
+      });
+
+      document.getElementById('servicesTab').addEventListener('click', function(e) {
+        e.preventDefault();
+        showServicesSection();
+      });
+    });
+
+    // Funciones para cambiar de sección
+    function showBookingsSection() {
+      document.getElementById('bookingsSection').style.display = 'block';
+      document.getElementById('servicesSection').style.display = 'none';
+      document.getElementById('bookingsTab').classList.add('active');
+      document.getElementById('servicesTab').classList.remove('active');
+      hideBookingDetails();
+    }
+
+    function showServicesSection() {
+      document.getElementById('bookingsSection').style.display = 'none';
+      document.getElementById('servicesSection').style.display = 'block';
+      document.getElementById('bookingsTab').classList.remove('active');
+      document.getElementById('servicesTab').classList.add('active');
+      hideServiceDetails();
+    }
+
+    // Funciones para cargar datos
+    function fetchServices() {
+      // En un entorno real, esto sería una llamada AJAX a tu API
+      // Para esta demo, cargaremos directamente del archivo JSON
+      fetch('../data/services.json')
+        .then(response => response.json())
+        .then(data => {
+          services = data.services;
+          renderServicesTable();
+        })
+        .catch(error => {
+          console.error('Error al cargar servicios:', error);
+          alert('Error al cargar los servicios. Por favor, intenta de nuevo.');
+        });
+    }
+
+    function fetchBookings() {
+      // En un entorno real, esto sería una llamada AJAX a tu API
+      fetch('../data/bookings.json')
+        .then(response => response.json())
+        .then(data => {
+          bookings = data.bookings;
+          renderBookingsTable();
+        })
+        .catch(error => {
+          console.error('Error al cargar reservas:', error);
+          alert('Error al cargar las reservas. Por favor, intenta de nuevo.');
+        });
+    }
+
+    // Funciones para renderizar tablas
+    function renderServicesTable() {
+      const tableBody = document.getElementById('servicesTableBody');
+      tableBody.innerHTML = '';
+
+      services.forEach(service => {
+        const row = document.createElement('tr');
+        
+        // Servicio con ícono
+        const serviceCell = document.createElement('td');
+        serviceCell.innerHTML = `<span class="service-icon">${service.icon}</span> ${service.name}`;
+        row.appendChild(serviceCell);
+        
+        // Precio por hora
+        const priceCell = document.createElement('td');
+        priceCell.textContent = `€${service.price_per_hour}`;
+        row.appendChild(priceCell);
+        
+        // Duración
+        const durationCell = document.createElement('td');
+        durationCell.textContent = `${service.min_duration}-${service.max_duration} horas`;
+        row.appendChild(durationCell);
+        
+        // Acciones
+        const actionCell = document.createElement('td');
+        const detailsButton = document.createElement('button');
+        detailsButton.className = 'btn btn-sm btn-primary';
+        detailsButton.textContent = 'Ver detalles';
+        detailsButton.onclick = () => showServiceDetails(service.id);
+        actionCell.appendChild(detailsButton);
+        row.appendChild(actionCell);
+        
+        tableBody.appendChild(row);
+      });
+    }
+
+    function renderBookingsTable() {
+      const tableBody = document.getElementById('bookingsTableBody');
+      tableBody.innerHTML = '';
+
+      bookings.forEach(booking => {
+        const row = document.createElement('tr');
+        
+        // ID
+        const idCell = document.createElement('td');
+        idCell.textContent = booking.id;
+        row.appendChild(idCell);
+        
+        // Cliente
+        const clientCell = document.createElement('td');
+        clientCell.textContent = booking.clientName;
+        row.appendChild(clientCell);
+        
+        // Servicio
+        const serviceCell = document.createElement('td');
+        const service = services.find(s => s.id === booking.serviceId) || { name: 'Desconocido' };
+        serviceCell.textContent = service.name;
+        row.appendChild(serviceCell);
+        
+        // Fecha y Hora
+        const dateCell = document.createElement('td');
+        dateCell.textContent = `${booking.date} ${booking.startTime}`;
+        row.appendChild(dateCell);
+        
+        // Estado
+        const statusCell = document.createElement('td');
+        let statusClass = '';
+        
+        switch(booking.status) {
+          case 'confirmado':
+            statusClass = 'status-confirmed';
+            break;
+          case 'pendiente':
+            statusClass = 'status-pending';
+            break;
+          case 'cancelado':
+            statusClass = 'status-cancelled';
+            break;
+        }
+        
+        statusCell.innerHTML = `<span class="${statusClass}">${booking.status.toUpperCase()}</span>`;
+        row.appendChild(statusCell);
+        
+        // Acciones
+        const actionCell = document.createElement('td');
+        const detailsButton = document.createElement('button');
+        detailsButton.className = 'btn btn-sm btn-primary';
+        detailsButton.textContent = 'Ver detalles';
+        detailsButton.onclick = () => showBookingDetails(booking.id);
+        actionCell.appendChild(detailsButton);
+        row.appendChild(actionCell);
+        
+        tableBody.appendChild(row);
+      });
+    }
+
+    // Funciones para mostrar detalles
+    function showServiceDetails(serviceId) {
+      const service = services.find(s => s.id === serviceId);
+      if (!service) return;
+      
+      currentServiceId = serviceId;
+      
+      const content = document.getElementById('serviceDetailsContent');
+      
+      // Construir el HTML de los detalles
+      let html = `
+        <div class="mb-4">
+          <h3><span class="service-icon">${service.icon}</span> ${service.name}</h3>
+          <p class="text-muted">${service.description}</p>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Información Básica</h5>
+            <ul class="list-group list-group-flush bg-transparent">
+              <li class="list-group-item bg-transparent text-light">Precio por hora: <strong>€${service.price_per_hour}</strong></li>
+              <li class="list-group-item bg-transparent text-light">Duración mínima: <strong>${service.min_duration} horas</strong></li>
+              <li class="list-group-item bg-transparent text-light">Duración máxima: <strong>${service.max_duration} horas</strong></li>
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <h5>Horarios Disponibles</h5>
+            <p>${service.available_times.join(', ')}</p>
+          </div>
+        </div>
+
+        <div class="row mt-3">
+          <div class="col-md-6">
+            <h5>Equipamiento</h5>
+            <ul>
+      `;
+      
+      service.equipment.forEach(item => {
+        html += `<li>${item}</li>`;
+      });
+      
+      html += `
+            </ul>
+          </div>
+          <div class="col-md-6">
+            <h5>Características</h5>
+            <ul>
+      `;
+      
+      service.features.forEach(feature => {
+        html += `<li>${feature}</li>`;
+      });
+      
+      html += `
+            </ul>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <h5>Requisitos</h5>
+          <ul>
+      `;
+      
+      service.requirements.forEach(req => {
+        html += `<li>${req}</li>`;
+      });
+      
+      html += `
+          </ul>
+        </div>
+      `;
+      
+      content.innerHTML = html;
+      document.getElementById('serviceDetails').style.display = 'block';
+    }
+
+    function showBookingDetails(bookingId) {
+      const booking = bookings.find(b => b.id === bookingId);
+      if (!booking) return;
+      
+      currentBookingId = bookingId;
+      
+      const service = services.find(s => s.id === booking.serviceId) || { name: 'Desconocido', icon: '❓' };
+      const content = document.getElementById('bookingDetailsContent');
+      
+      // Construir el HTML de los detalles
+      let statusClass = '';
+      switch(booking.status) {
+        case 'confirmado':
+          statusClass = 'status-confirmed';
+          break;
+        case 'pendiente':
+          statusClass = 'status-pending';
+          break;
+        case 'cancelado':
+          statusClass = 'status-cancelled';
+          break;
+      }
+      
+      let html = `
+        <div class="mb-3">
+          <h3>Reserva #${booking.id}</h3>
+          <span class="${statusClass}">Estado: ${booking.status.toUpperCase()}</span>
+        </div>
+        
+        <div class="row">
+          <div class="col-md-6">
+            <h5>Detalles del Servicio</h5>
+            <p><span class="service-icon">${service.icon}</span> <strong>${service.name}</strong></p>
+            <p>Fecha: <strong>${booking.date}</strong></p>
+            <p>Hora: <strong>${booking.startTime}</strong></p>
+            <p>Duración: <strong>${booking.duration} horas</strong></p>
+            <p>Precio Total: <strong>€${booking.totalPrice}</strong></p>
+          </div>
+          
+          <div class="col-md-6">
+            <h5>Información de Contacto</h5>
+            <p>Cliente: <strong>${booking.clientName}</strong></p>
+            <p>Email: <strong>${booking.clientEmail}</strong></p>
+            <p>Teléfono: <strong>${booking.clientPhone}</strong></p>
+            <p>Ubicación: <strong>${booking.location}</strong></p>
+          </div>
+        </div>
+        
+        <div class="mt-3">
+          <h5>Comentarios</h5>
+          <p>${booking.comments || 'No hay comentarios adicionales'}</p>
+        </div>
+        
+        <div class="mt-3">
+          <p class="text-muted small">Reserva creada el: ${booking.createdAt}</p>
+        </div>
+      `;
+      
+      content.innerHTML = html;
+      document.getElementById('bookingDetails').style.display = 'block';
+    }
+
+    // Funciones para ocultar detalles
+    function hideServiceDetails() {
+      document.getElementById('serviceDetails').style.display = 'none';
+      currentServiceId = null;
+    }
+
+    function hideBookingDetails() {
+      document.getElementById('bookingDetails').style.display = 'none';
+      currentBookingId = null;
+    }
+
+    // Funciones para actualizar datos
+    function refreshServices() {
+      fetchServices();
+    }
+
+    function refreshBookings() {
+      fetchBookings();
+    }
+
+    function updateBookingStatus(status) {
+      if (!currentBookingId) return;
+      
+      // En un entorno real, esto sería una llamada AJAX a tu API
+      // Para esta demo, simplemente actualizamos la interfaz
+      const booking = bookings.find(b => b.id === currentBookingId);
+      if (booking) {
+        booking.status = status;
+        renderBookingsTable();
+        showBookingDetails(currentBookingId);
+        
+        alert(`Estado de la reserva ${currentBookingId} actualizado a: ${status.toUpperCase()}`);
+      }
+    }
+  </script>
+</body>
+</html>
