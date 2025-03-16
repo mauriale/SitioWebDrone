@@ -1,0 +1,35 @@
+{
+  "bookings": [
+    {
+      "id": "B001",
+      "serviceId": "montaña",
+      "date": "20/03/2025",
+      "startTime": "09:00",
+      "duration": 4,
+      "clientName": "Juan Pérez",
+      "clientEmail": "juan.perez@ejemplo.com",
+      "clientPhone": "+34 612 345 678",
+      "location": "Sierra de Guadarrama, Madrid",
+      "comments": "Filmación para documental sobre senderismo",
+      "status": "confirmado",
+      "totalPrice": 480,
+      "createdAt": "15/03/2025"
+    },
+    {
+      "id": "B002",
+      "serviceId": "playa",
+      "date": "25/03/2025",
+      "startTime": "17:00",
+      "duration": 2,
+      "clientName": "María Rodríguez",
+      "clientEmail": "maria.r@ejemplo.com",
+      "clientPhone": "+34 623 456 789",
+      "location": "Playa de la Concha, San Sebastián",
+      "comments": "Grabación para vídeo promocional de hotel",
+      "status": "pendiente",
+      "totalPrice": 200,
+      "createdAt": "12/03/2025"
+    }
+  ],
+  "nextBookingId": "B003"
+}
