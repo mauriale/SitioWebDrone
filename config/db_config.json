@@ -1,0 +1,75 @@
+{
+  "database": {
+    "type": "sqlite",
+    "path": "database/dronevista.db",
+    "backup_path": "database/backup/",
+    "auto_backup": true,
+    "backup_frequency": "daily"
+  },
+  "api": {
+    "host": "localhost",
+    "port": 5000,
+    "base_url": "/api",
+    "debug": true,
+    "cors_enabled": true,
+    "allowed_origins": ["http://localhost", "https://dronevista.com"],
+    "timeout": 30,
+    "rate_limit": {
+      "enabled": true,
+      "requests_per_minute": 60
+    }
+  },
+  "auth": {
+    "enabled": false,
+    "jwt_secret": "your-secret-key-here",
+    "token_expiry": 86400,
+    "admin_credentials": {
+      "username": "admin",
+      "password_hash": "change-this-to-a-secure-hash"
+    }
+  },
+  "endpoints": {
+    "services": {
+      "get_all": "/services",
+      "get_one": "/services/{id}",
+      "available_times": "/services/{id}/available-times"
+    },
+    "bookings": {
+      "get_all": "/bookings",
+      "get_one": "/bookings/{id}",
+      "create": "/bookings",
+      "update_status": "/bookings/{id}/status"
+    }
+  },
+  "frontend": {
+    "api_url": "http://localhost:5000/api",
+    "files_path": "/static/uploads/",
+    "allowed_file_types": ["jpg", "jpeg", "png", "pdf"]
+  },
+  "logging": {
+    "level": "info",
+    "file": "logs/api.log",
+    "max_size": 10485760,
+    "backup_count": 5,
+    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  },
+  "email": {
+    "enabled": false,
+    "smtp_server": "smtp.example.com",
+    "smtp_port": 587,
+    "use_tls": true,
+    "username": "notifications@dronevista.com",
+    "password": "your-email-password",
+    "from_email": "notifications@dronevista.com",
+    "admin_email": "admin@dronevista.com"
+  },
+  "notifications": {
+    "send_on_new_booking": true,
+    "send_on_status_change": true,
+    "templates": {
+      "new_booking": "templates/email/new_booking.html",
+      "booking_confirmed": "templates/email/booking_confirmed.html",
+      "booking_cancelled": "templates/email/booking_cancelled.html"
+    }
+  }
+}
