@@ -260,6 +260,104 @@ h1 {
   transform: translateY(-3px);
 }
 
+/* Donation section styles */
+.donation-section {
+  margin-top: 60px;
+  padding: 30px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 15px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.donation-section h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  font-size: 1.8rem;
+  color: #FF6B00;
+}
+
+.donation-content {
+  display: grid;
+  gap: 30px;
+}
+
+@media (min-width: 768px) {
+  .donation-content {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.donation-text {
+  margin-bottom: 20px;
+}
+
+.donation-text p {
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.donation-text ul {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.donation-text li {
+  margin-bottom: 8px;
+}
+
+.donation-options {
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.donation-options h3 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.paypal-button-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.donation-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.donation-amounts label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.donation-amounts label:hover {
+  background-color: rgba(255, 107, 0, 0.2);
+}
+
+.donation-note {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 0.9rem;
+}
+
+.donation-note p {
+  margin-bottom: 5px;
+}
+
 /* Spinner loading */
 .spinner {
   display: none;
