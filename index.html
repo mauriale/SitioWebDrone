@@ -6,6 +6,8 @@
   <title>Servicios de Piloto de Drone</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="css/styles.css">
+  <!-- Incluir el SDK de PayPal -->
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
 </head>
 <body>
   <div class="video-container">
@@ -140,39 +142,41 @@
         <div class="donation-options">
           <h3>Apóyanos con PayPal</h3>
           <div class="paypal-button-container">
-            <!-- Botón de PayPal para donaciones -->
-            <form action="https://www.paypal.com/donate" method="post" target="_blank">
-              <input type="hidden" name="business" value="TU_CORREO_PAYPAL@ejemplo.com" />
-              <input type="hidden" name="currency_code" value="EUR" />
-              <input type="hidden" name="item_name" value="Apoyo a DroneVista" />
-              
-              <!-- Opciones de cantidad para donar -->
-              <div class="donation-amounts">
-                <label>
-                  <input type="radio" name="amount" value="5" checked> €5
-                </label>
-                <label>
-                  <input type="radio" name="amount" value="10"> €10
-                </label>
-                <label>
-                  <input type="radio" name="amount" value="20"> €20
-                </label>
-                <label>
-                  <input type="radio" name="amount" value="50"> €50
-                </label>
-                <label>
-                  <input type="radio" name="amount" value=""> Otra cantidad
-                </label>
-              </div>
-              
-              <input type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
-            </form>
+            <div class="donation-amounts">
+              <label>
+                <input type="radio" name="donation-amount" value="5" checked> €5
+              </label>
+              <label>
+                <input type="radio" name="donation-amount" value="10"> €10
+              </label>
+              <label>
+                <input type="radio" name="donation-amount" value="20"> €20
+              </label>
+              <label>
+                <input type="radio" name="donation-amount" value="50"> €50
+              </label>
+              <label>
+                <input type="radio" name="donation-amount" value="custom"> Otra
+              </label>
+            </div>
+            
+            <div class="custom-amount" style="display: none; margin: 10px 0;">
+              <label>€</label>
+              <input type="number" id="custom-donation-amount" min="1" value="15">
+            </div>
+            
+            <!-- Contenedor para el botón de PayPal generado dinámicamente -->
+            <div id="paypal-button-container" style="margin-top: 20px;"></div>
+            
+            <!-- Enlace directo a PayPal.me como alternativa -->
+            <div style="margin-top: 20px; text-align: center;">
+              <p>O visita nuestro enlace directo de PayPal:</p>
+              <a href="https://paypal.me/Inocencio" target="_blank" class="cta-button" style="display: inline-block; margin-top: 10px;">PayPal.me/Inocencio</a>
+            </div>
           </div>
           
-          <div class="donation-note">
-            <p>También puedes apoyarnos directamente enviando una transferencia a:</p>
-            <p><strong>Titular:</strong> DroneVista</p>
-            <p><strong>IBAN:</strong> ES00 0000 0000 0000 0000 0000</p>
+          <div class="donation-note" style="margin-top: 20px; font-size: 0.9em;">
+            <p>Para más opciones de donación, visita nuestra <a href="donaciones.html" style="color: #FF6B00; text-decoration: underline;">página de donaciones</a>.</p>
           </div>
         </div>
       </div>
@@ -192,5 +196,82 @@
   <!-- JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="js/booking.js"></script>
+  
+  <!-- Script para el botón de PayPal -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Gestionar la selección de cantidad de donación
+      const donationRadios = document.querySelectorAll('input[name="donation-amount"]');
+      const customAmountContainer = document.querySelector('.custom-amount');
+      const customAmountInput = document.getElementById('custom-donation-amount');
+      
+      // Función para obtener el monto de donación seleccionado
+      function getSelectedAmount() {
+        const selectedRadio = document.querySelector('input[name="donation-amount"]:checked');
+        if (selectedRadio.value === 'custom') {
+          return parseFloat(customAmountInput.value) || 5; // Valor por defecto si no es válido
+        } else {
+          return parseFloat(selectedRadio.value);
+        }
+      }
+      
+      // Mostrar/ocultar el campo de cantidad personalizada
+      donationRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.value === 'custom') {
+            customAmountContainer.style.display = 'block';
+          } else {
+            customAmountContainer.style.display = 'none';
+          }
+          
+          // Actualizar el botón de PayPal con la nueva cantidad
+          renderPayPalButton();
+        });
+      });
+      
+      // Actualizar cuando cambia la cantidad personalizada
+      customAmountInput.addEventListener('input', function() {
+        if (this.value < 1) this.value = 1;
+        renderPayPalButton();
+      });
+      
+      // Función para renderizar el botón de PayPal
+      function renderPayPalButton() {
+        const paypalContainer = document.getElementById('paypal-button-container');
+        paypalContainer.innerHTML = ''; // Limpiar contenedor
+        
+        paypal.Buttons({
+          style: {
+            color: 'blue',
+            shape: 'pill',
+            label: 'donate'
+          },
+          createOrder: function(data, actions) {
+            return actions.order.create({
+              purchase_units: [{
+                amount: {
+                  value: getSelectedAmount().toString(),
+                  currency_code: 'EUR'
+                },
+                description: 'Donación a DroneVista'
+              }],
+              application_context: {
+                shipping_preference: 'NO_SHIPPING'
+              }
+            });
+          },
+          onApprove: function(data, actions) {
+            return actions.order.capture().then(function(details) {
+              // Mostrar mensaje de agradecimiento
+              alert('¡Gracias ' + details.payer.name.given_name + ' por tu donación!');
+            });
+          }
+        }).render('#paypal-button-container');
+      }
+      
+      // Renderizar el botón de PayPal inicialmente
+      renderPayPalButton();
+    });
+  </script>
 </body>
 </html>
