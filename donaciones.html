@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donaciones - DroneVista</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .donation-page {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+    
+    .donation-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .donation-header h1 {
+      color: #FF6B00;
+      margin-bottom: 15px;
+    }
+    
+    .donation-header p {
+      font-size: 1.2rem;
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .donation-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    @media (min-width: 768px) {
+      .donation-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .donation-info {
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      padding: 30px;
+    }
+    
+    .donation-info h2 {
+      margin-bottom: 20px;
+      color: #FF6B00;
+    }
+    
+    .donation-info p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    
+    .donation-info ul {
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .donation-info li {
+      margin-bottom: 10px;
+    }
+    
+    .donation-form {
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      padding: 30px;
+    }
+    
+    .donation-form h2 {
+      margin-bottom: 20px;
+      color: #FF6B00;
+      text-align: center;
+    }
+    
+    .donation-methods {
+      display: grid;
+      gap: 30px;
+    }
+    
+    .donation-method {
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+      padding: 20px;
+    }
+    
+    .donation-method h3 {
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    
+    .paypal-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+    
+    .donation-amounts {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    
+    .donation-amounts label {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    
+    .donation-amounts label:hover {
+      background-color: rgba(255, 107, 0, 0.2);
+    }
+    
+    .custom-amount {
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+    
+    .custom-amount input {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 5px;
+      color: white;
+      padding: 10px;
+      width: 100px;
+      text-align: center;
+    }
+    
+    .bank-transfer {
+      margin-top: 20px;
+    }
+    
+    .bank-details {
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 15px;
+      border-radius: 5px;
+      margin-top: 15px;
+    }
+    
+    .bank-details p {
+      margin-bottom: 5px;
+    }
+    
+    .donation-footer {
+      text-align: center;
+      margin-top: 40px;
+    }
+    
+    .back-button {
+      display: inline-block;
+      background-color: #FF6B00;
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: transform 0.3s, background-color 0.3s;
+      margin-top: 20px;
+    }
+    
+    .back-button:hover {
+      background-color: #FF8F3F;
+      transform: translateY(-3px);
+    }
+    
+    .crypto-section {
+      margin-top: 30px;
+    }
+    
+    .crypto-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      margin-top: 15px;
+    }
+    
+    @media (min-width: 768px) {
+      .crypto-options {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .crypto-option {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 12px;
+      border-radius: 5px;
+    }
+    
+    .crypto-option h4 {
+      margin-bottom: 8px;
+      color: #FF6B00;
+    }
+    
+    .crypto-address {
+      font-family: monospace;
+      word-break: break-all;
+      font-size: 0.85rem;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 8px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <video autoplay muted loop playsinline class="video-background">
+      <source src="tu-video-drone.mp4" type="video/mp4">
+      <!-- Imagen de respaldo en caso de que el video no cargue -->
+      <img src="/api/placeholder/480/800" alt="Vista aérea desde un drone" class="video-background">
+    </video>
+  </div>
+
+  <div class="content">
+    <header>
+      <div class="logo">DroneVista</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html#servicios">Servicios</a></li>
+        <li><a href="index.html#reservas">Reservas</a></li>
+        <li><a href="#" class="active">Apóyanos</a></li>
+        <li><a href="index.html#contacto">Contacto</a></li>
+      </ul>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </header>
+
+    <div class="donation-page">
+      <div class="donation-header">
+        <h1>Apoya Nuestro Trabajo</h1>
+        <p>Tus donaciones nos permiten seguir capturando imágenes únicas desde el cielo y ofreciendo servicios de calidad a precios accesibles</p>
+      </div>
+
+      <div class="donation-grid">
+        <div class="donation-info">
+          <h2>¿Por qué apoyarnos?</h2>
+          <p>En DroneVista, nos esforzamos por ofrecer perspectivas únicas del mundo a través de la tecnología de drones. Tu apoyo nos ayuda a:</p>
+          
+          <ul>
+            <li><strong>Mejorar nuestro equipo:</strong> Invertir en drones de última generación, cámaras de alta resolución y accesorios especializados.</li>
+            <li><strong>Explorar nuevas locaciones:</strong> Viajar a lugares remotos y capturar paisajes nunca antes vistos desde el aire.</li>
+            <li><strong>Crear contenido educativo:</strong> Desarrollar tutoriales y recursos para la comunidad de pilotos de drones.</li>
+            <li><strong>Mantener precios accesibles:</strong> Ofrecer nuestros servicios a un costo razonable para que más personas puedan disfrutarlos.</li>
+            <li><strong>Innovar en técnicas:</strong> Experimentar con nuevas formas de captura y edición para crear contenido único.</li>
+          </ul>
+          
+          <p>Cada donación, sin importar su tamaño, marca una diferencia significativa en nuestra capacidad para seguir innovando y compartiendo nuestra pasión por las vistas aéreas.</p>
+          
+          <h2>Beneficios para donantes</h2>
+          <p>Como muestra de agradecimiento, ofrecemos a nuestros donantes:</p>
+          
+          <ul>
+            <li>Acceso anticipado a nuevo contenido</li>
+            <li>Menciones especiales en nuestros proyectos</li>
+            <li>Descuentos en servicios de drone (según el monto de la donación)</li>
+            <li>Contenido exclusivo "detrás de cámaras"</li>
+          </ul>
+        </div>
+
+        <div class="donation-form">
+          <h2>Realiza tu Donación</h2>
+          
+          <div class="donation-methods">
+            <div class="donation-method">
+              <h3>Donación con PayPal</h3>
+              <p>Rápido, seguro y conveniente:</p>
+              
+              <div class="donation-amounts">
+                <label>
+                  <input type="radio" name="amount" value="5" checked> €5
+                </label>
+                <label>
+                  <input type="radio" name="amount" value="10"> €10
+                </label>
+                <label>
+                  <input type="radio" name="amount" value="20"> €20
+                </label>
+                <label>
+                  <input type="radio" name="amount" value="50"> €50
+                </label>
+                <label>
+                  <input type="radio" name="amount" value="100"> €100
+                </label>
+              </div>
+              
+              <div class="custom-amount">
+                <label>Otra cantidad: €</label>
+                <input type="number" min="1" placeholder="Personalizado">
+              </div>
+              
+              <div class="paypal-container">
+                <form action="https://www.paypal.com/donate" method="post" target="_blank">
+                  <input type="hidden" name="business" value="TU_CORREO_PAYPAL@ejemplo.com" />
+                  <input type="hidden" name="currency_code" value="EUR" />
+                  <input type="hidden" name="item_name" value="Apoyo a DroneVista" />
+                  <input type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+                </form>
+              </div>
+            </div>
+            
+            <div class="donation-method">
+              <h3>Transferencia Bancaria</h3>
+              <p>Para donaciones mediante transferencia bancaria:</p>
+              
+              <div class="bank-details">
+                <p><strong>Titular:</strong> DroneVista</p>
+                <p><strong>Banco:</strong> Banco Ejemplo</p>
+                <p><strong>IBAN:</strong> ES00 0000 0000 0000 0000 0000</p>
+                <p><strong>BIC/SWIFT:</strong> EXAMPLEXXX</p>
+                <p><strong>Concepto:</strong> Donación DroneVista</p>
+              </div>
+              
+              <p class="bank-note">Por favor, envíanos un correo electrónico a info@dronevista.com después de realizar la transferencia para que podamos agradecerte personalmente.</p>
+            </div>
+            
+            <div class="donation-method crypto-section">
+              <h3>Criptomonedas</h3>
+              <p>También aceptamos donaciones en criptomonedas:</p>
+              
+              <div class="crypto-options">
+                <div class="crypto-option">
+                  <h4>Bitcoin (BTC)</h4>
+                  <div class="crypto-address">1AbCdEfGhIjKlMnOpQrStUvWxYz1234567890</div>
+                </div>
+                
+                <div class="crypto-option">
+                  <h4>Ethereum (ETH)</h4>
+                  <div class="crypto-address">0x1AbCdEf1234567890GhIjKlMnOpQrStUvWxYz</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="donation-footer">
+        <p>Si tienes alguna pregunta sobre donaciones o deseas explorar otras formas de apoyar nuestro trabajo, no dudes en contactarnos a <strong>info@dronevista.com</strong></p>
+        <p>¡Gracias por tu generosidad y por ayudarnos a seguir volando alto!</p>
+        <a href="index.html" class="back-button">Volver a la página principal</a>
+      </div>
+    </div>
+
+    <footer id="contacto">
+      <p>© 2025 DroneVista. Todos los derechos reservados.</p>
+      <p>Email: info@dronevista.com | Teléfono: +1 234 567 890</p>
+      <div class="social-links">
+        <a href="#" class="social-link">📱</a>
+        <a href="#" class="social-link">📷</a>
+        <a href="#" class="social-link">📹</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Manejar el botón de menú
+      const menuBtn = document.getElementById('menuBtn');
+      const navLinks = document.getElementById('navLinks');
+      
+      menuBtn.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+      });
+      
+      // Sincronizar selección de cantidad personalizada con radio buttons
+      const amountRadios = document.querySelectorAll('input[name="amount"]');
+      const customAmountInput = document.querySelector('.custom-amount input');
+      
+      customAmountInput.addEventListener('focus', function() {
+        // Desmarcar todos los radio buttons
+        amountRadios.forEach(radio => {
+          radio.checked = false;
+        });
+      });
+      
+      customAmountInput.addEventListener('input', function() {
+        // Asegurar que solo se ingresen números positivos
+        if (this.value < 0) this.value = 0;
+      });
+      
+      amountRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+          // Limpiar input personalizado cuando se selecciona un radio button
+          if (this.checked) {
+            customAmountInput.value = '';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>
