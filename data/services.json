@@ -1,0 +1,100 @@
+{
+  "services": [
+    {
+      "id": "montaña",
+      "name": "Filmación en Montaña",
+      "description": "Tomas espectaculares de paisajes montañosos, senderos y actividades al aire libre desde ángulos imposibles.",
+      "icon": "🏔️",
+      "price_per_hour": 120,
+      "min_duration": 2,
+      "max_duration": 8,
+      "available_times": ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00"],
+      "equipment": ["Drone DJI Mavic 3 Pro", "Cámaras 4K", "Estabilizadores"],
+      "features": [
+        "Filmación aérea en terrenos elevados",
+        "Seguimiento de senderistas o deportistas",
+        "Vistas panorámicas de montañas y valles",
+        "Filmación en condiciones climáticas variables"
+      ],
+      "requirements": [
+        "Ubicación accesible para el equipo",
+        "Permisos locales para vuelo de drones en zonas montañosas",
+        "Clima adecuado (sin fuertes vientos o lluvia)"
+      ],
+      "image": "montaña.jpg"
+    },
+    {
+      "id": "playa",
+      "name": "Filmación en Playa",
+      "description": "Imágenes aéreas impresionantes de costas, olas y eventos playeros con perspectivas únicas.",
+      "icon": "🏖️",
+      "price_per_hour": 100,
+      "min_duration": 1,
+      "max_duration": 6,
+      "available_times": ["07:00", "08:00", "09:00", "10:00", "11:00", "15:00", "16:00", "17:00", "18:00"],
+      "equipment": ["Drone DJI Air 2S", "Cámaras de alta resolución resistentes al agua"],
+      "features": [
+        "Tomas aéreas de playas y costas",
+        "Seguimiento de surfistas y deportes acuáticos",
+        "Filmación de eventos en la playa",
+        "Vuelos al amanecer y atardecer para capturas espectaculares"
+      ],
+      "requirements": [
+        "Condiciones de viento moderadas",
+        "Permisos para operar drones en zonas costeras",
+        "Sin alta concentración de personas (por seguridad)"
+      ],
+      "image": "playa.jpg"
+    },
+    {
+      "id": "produccion",
+      "name": "Producción Audiovisual",
+      "description": "Servicios completos de filmación, edición y posproducción para crear contenido de alta calidad.",
+      "icon": "🎬",
+      "price_per_hour": 150,
+      "min_duration": 3,
+      "max_duration": 10,
+      "available_times": ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"],
+      "equipment": ["Múltiples drones especializados", "Equipo de edición profesional", "Software de posproducción"],
+      "features": [
+        "Filmación aérea profesional",
+        "Edición de video avanzada",
+        "Corrección de color",
+        "Efectos visuales y gráficos animados",
+        "Música y efectos de sonido",
+        "Entrega en múltiples formatos"
+      ],
+      "requirements": [
+        "Brief detallado del proyecto",
+        "Reunión de planificación previa",
+        "Definición clara de entregables"
+      ],
+      "image": "produccion.jpg"
+    },
+    {
+      "id": "corporativo",
+      "name": "Servicios Corporativos",
+      "description": "Filmación para empresas, publicidad, eventos y proyectos especiales con tecnología de punta.",
+      "icon": "🏢",
+      "price_per_hour": 180,
+      "min_duration": 4,
+      "max_duration": 12,
+      "available_times": ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"],
+      "equipment": ["Fleet de drones profesionales", "Cámaras térmicas", "Drones para interiores"],
+      "features": [
+        "Filmación aérea de instalaciones",
+        "Tours virtuales",
+        "Inspección de infraestructuras",
+        "Cobertura de eventos corporativos",
+        "Material para marketing y publicidad"
+      ],
+      "requirements": [
+        "Contrato formal",
+        "Permisos de acceso a instalaciones",
+        "Identificación de áreas restringidas",
+        "Acuerdos de confidencialidad si es necesario"
+      ],
+      "image": "corporativo.jpg"
+    }
+  ]
+}
