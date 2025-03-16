@@ -277,48 +277,6 @@ h1 {
   100% { transform: rotate(360deg); }
 }
 
-/* Calendar styles */
-.flatpickr-calendar {
-  background: rgba(0, 0, 0, 0.8) !important;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-}
-
-.flatpickr-day {
-  color: #ddd !important;
-}
-
-.flatpickr-day.selected {
-  background: #FF6B00 !important;
-  border-color: #FF6B00 !important;
-}
-
-.flatpickr-day:hover {
-  background: rgba(255, 107, 0, 0.3) !important;
-}
-
-.flatpickr-day.flatpickr-disabled {
-  color: #666 !important;
-}
-
-.flatpickr-months .flatpickr-month,
-.flatpickr-weekdays,
-.flatpickr-weekday {
-  background: transparent !important;
-  color: white !important;
-}
-
-.flatpickr-current-month .flatpickr-monthDropdown-months,
-.flatpickr-current-month input.cur-year {
-  color: white !important;
-}
-
-.numInputWrapper span.arrowUp,
-.numInputWrapper span.arrowDown {
-  border-bottom-color: #FF6B00 !important;
-  border-top-color: #FF6B00 !important;
-}
-
 /* Confirmation message */
 .confirmation {
   display: none;
@@ -412,6 +370,10 @@ footer {
 
 /* Media query for tablets and larger */
 @media (min-width: 768px) {
+  .reservation-form {
+    grid-template-columns: 1fr 1fr;
+  }
+  
   .nav-links {
     display: flex;
     gap: 30px;
@@ -427,8 +389,46 @@ footer {
   .menu-btn {
     display: none;
   }
-  
-  .reservation-form {
-    grid-template-columns: 1fr 1fr;
-  }
+}
+
+/* Calendar (Flatpickr) styles */
+.flatpickr-calendar {
+  background: rgba(0, 0, 0, 0.8) !important;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.flatpickr-day {
+  color: #ddd !important;
+}
+
+.flatpickr-day.selected {
+  background: #FF6B00 !important;
+  border-color: #FF6B00 !important;
+}
+
+.flatpickr-day:hover {
+  background: rgba(255, 107, 0, 0.3) !important;
+}
+
+.flatpickr-day.flatpickr-disabled {
+  color: #666 !important;
+}
+
+.flatpickr-months .flatpickr-month,
+.flatpickr-weekdays,
+.flatpickr-weekday {
+  background: transparent !important;
+  color: white !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-current-month input.cur-year {
+  color: white !important;
+}
+
+.numInputWrapper span.arrowUp,
+.numInputWrapper span.arrowDown {
+  border-bottom-color: #FF6B00 !important;
+  border-top-color: #FF6B00 !important;
 }
