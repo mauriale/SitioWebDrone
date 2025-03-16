@@ -21,6 +21,7 @@
       <ul class="nav-links" id="navLinks">
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#reservas">Reservas</a></li>
+        <li><a href="#donaciones">Apóyanos</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
       <button class="menu-btn" id="menuBtn">☰</button>
@@ -119,6 +120,62 @@
       </div>
 
       <div id="reservationSpinner" class="spinner"></div>
+    </section>
+
+    <!-- Nueva sección de donaciones -->
+    <section class="donation-section animate-in" id="donaciones">
+      <h2>Apoya Nuestro Trabajo</h2>
+      <div class="donation-content">
+        <div class="donation-text">
+          <p>Si disfrutas de nuestro contenido y servicios, considera hacer una donación para ayudarnos a seguir mejorando. Tu apoyo nos permite:</p>
+          <ul>
+            <li>Invertir en equipos de última generación</li>
+            <li>Mejorar la calidad de nuestras producciones</li>
+            <li>Explorar nuevas locaciones para capturas únicas</li>
+            <li>Mantener precios accesibles para todos</li>
+          </ul>
+          <p>¡Cualquier cantidad hace la diferencia!</p>
+        </div>
+        
+        <div class="donation-options">
+          <h3>Apóyanos con PayPal</h3>
+          <div class="paypal-button-container">
+            <!-- Botón de PayPal para donaciones -->
+            <form action="https://www.paypal.com/donate" method="post" target="_blank">
+              <input type="hidden" name="business" value="TU_CORREO_PAYPAL@ejemplo.com" />
+              <input type="hidden" name="currency_code" value="EUR" />
+              <input type="hidden" name="item_name" value="Apoyo a DroneVista" />
+              
+              <!-- Opciones de cantidad para donar -->
+              <div class="donation-amounts">
+                <label>
+                  <input type="radio" name="amount" value="5" checked> €5
+                </label>
+                <label>
+                  <input type="radio" name="amount" value="10"> €10
+                </label>
+                <label>
+                  <input type="radio" name="amount" value="20"> €20
+                </label>
+                <label>
+                  <input type="radio" name="amount" value="50"> €50
+                </label>
+                <label>
+                  <input type="radio" name="amount" value=""> Otra cantidad
+                </label>
+              </div>
+              
+              <input type="image" src="https://www.paypalobjects.com/es_ES/ES/i/btn/btn_donateCC_LG.gif" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+            </form>
+          </div>
+          
+          <div class="donation-note">
+            <p>También puedes apoyarnos directamente enviando una transferencia a:</p>
+            <p><strong>Titular:</strong> DroneVista</p>
+            <p><strong>IBAN:</strong> ES00 0000 0000 0000 0000 0000</p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <footer id="contacto">
