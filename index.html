@@ -5,404 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Servicios de Piloto de Drone</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    body {
-      overflow-x: hidden;
-      color: white;
-    }
-
-    .video-container {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      overflow: hidden;
-    }
-
-    .video-background {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .content {
-      position: relative;
-      min-height: 100vh;
-      padding: 20px;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      padding: 20px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    }
-
-    .nav-links {
-      display: none;
-      list-style: none;
-    }
-    
-    .nav-links.active {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      top: 80px;
-      right: 20px;
-      background-color: rgba(0, 0, 0, 0.9);
-      padding: 20px;
-      border-radius: 10px;
-      z-index: 100;
-    }
-    
-    .nav-links li {
-      margin: 10px 0;
-    }
-    
-    .nav-links a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-    
-    .nav-links a:hover {
-      color: #FF6B00;
-    }
-
-    .menu-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-    }
-
-    .hero {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 40px 0;
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    }
-
-    .tagline {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-    }
-
-    .cta-button {
-      background-color: #FF6B00;
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      border-radius: 30px;
-      font-weight: bold;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: transform 0.3s, background-color 0.3s;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .cta-button:hover {
-      background-color: #FF8F3F;
-      transform: translateY(-3px);
-    }
-
-    .services {
-      margin-top: 40px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-    }
-
-    .service-card {
-      background-color: rgba(0, 0, 0, 0.6);
-      border-radius: 10px;
-      padding: 20px;
-      text-align: center;
-      transition: transform 0.3s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-5px);
-    }
-
-    .service-icon {
-      font-size: 2.5rem;
-      margin-bottom: 15px;
-    }
-
-    .service-title {
-      font-size: 1.3rem;
-      margin-bottom: 10px;
-    }
-
-    .service-description {
-      font-size: 0.9rem;
-      color: #e0e0e0;
-    }
-
-    /* Reservation section styles */
-    .reservation {
-      margin-top: 60px;
-      padding: 30px;
-      background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 15px;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .reservation h2 {
-      text-align: center;
-      margin-bottom: 25px;
-      font-size: 1.8rem;
-    }
-
-    .reservation-form {
-      display: grid;
-      gap: 20px;
-    }
-
-    @media (min-width: 768px) {
-      .reservation-form {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
-    }
-
-    .form-group input,
-    .form-group select,
-    .form-group textarea {
-      width: 100%;
-      padding: 12px;
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 5px;
-      color: white;
-      font-size: 1rem;
-    }
-
-    .form-group textarea {
-      height: 100px;
-      resize: vertical;
-    }
-
-    .form-group.full-width {
-      grid-column: 1 / -1;
-    }
-
-    .reservation-submit {
-      background-color: #FF6B00;
-      color: white;
-      border: none;
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      border-radius: 30px;
-      font-weight: bold;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: transform 0.3s, background-color 0.3s;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-      grid-column: 1 / -1;
-      justify-self: center;
-    }
-
-    .reservation-submit:hover {
-      background-color: #FF8F3F;
-      transform: translateY(-3px);
-    }
-
-    /* Calendar styles */
-    .flatpickr-calendar {
-      background: rgba(0, 0, 0, 0.8) !important;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5) !important;
-      border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    }
-
-    .flatpickr-day {
-      color: #ddd !important;
-    }
-
-    .flatpickr-day.selected {
-      background: #FF6B00 !important;
-      border-color: #FF6B00 !important;
-    }
-
-    .flatpickr-day:hover {
-      background: rgba(255, 107, 0, 0.3) !important;
-    }
-
-    .flatpickr-day.flatpickr-disabled {
-      color: #666 !important;
-    }
-
-    .flatpickr-months .flatpickr-month,
-    .flatpickr-weekdays,
-    .flatpickr-weekday {
-      background: transparent !important;
-      color: white !important;
-    }
-
-    .flatpickr-current-month .flatpickr-monthDropdown-months,
-    .flatpickr-current-month input.cur-year {
-      color: white !important;
-    }
-
-    .numInputWrapper span.arrowUp,
-    .numInputWrapper span.arrowDown {
-      border-bottom-color: #FF6B00 !important;
-      border-top-color: #FF6B00 !important;
-    }
-
-    /* Time picker */
-    .time-picker {
-      display: flex;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .time-picker select {
-      flex: 1;
-      padding: 10px;
-      background-color: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 5px;
-      color: white;
-      font-size: 1rem;
-    }
-
-    /* Confirmation message */
-    .confirmation {
-      display: none;
-      padding: 20px;
-      background-color: rgba(0, 128, 0, 0.7);
-      border-radius: 10px;
-      margin-top: 20px;
-      text-align: center;
-    }
-
-    footer {
-      margin-top: 40px;
-      text-align: center;
-      padding: 20px 0;
-      font-size: 0.9rem;
-      color: #cccccc;
-    }
-
-    .social-links {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-top: 15px;
-    }
-
-    .social-link {
-      color: white;
-      font-size: 1.5rem;
-    }
-
-    @keyframes flyIn {
-      0% {
-        opacity: 0;
-        transform: translateY(50px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .animate-in {
-      animation: flyIn 1s forwards;
-    }
-
-    .delay-1 {
-      animation-delay: 0.2s;
-    }
-
-    .delay-2 {
-      animation-delay: 0.4s;
-    }
-
-    .delay-3 {
-      animation-delay: 0.6s;
-    }
-
-    /* Media query for larger mobile devices */
-    @media (min-width: 480px) {
-      .services {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-
-    /* Media query for tablets and larger */
-    @media (min-width: 768px) {
-      .nav-links {
-        display: flex;
-        gap: 30px;
-      }
-      
-      .nav-links.active {
-        position: static;
-        flex-direction: row;
-        background-color: transparent;
-        padding: 0;
-      }
-      
-      .menu-btn {
-        display: none;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <div class="video-container">
-    <!-- Reemplaza "tu-video-drone.mp4" con el nombre real de tu archivo -->
     <video autoplay muted loop playsinline class="video-background">
       <source src="tu-video-drone.mp4" type="video/mp4">
-      <!-- Imagen de respaldo en caso de que el video no cargue -->
       <img src="/api/placeholder/480/800" alt="Vista aérea desde un drone" class="video-background">
     </video>
   </div>
@@ -425,83 +33,57 @@
     </section>
 
     <section class="services" id="servicios">
-      <div class="service-card animate-in delay-3">
-        <div class="service-icon">🏔️</div>
-        <h3 class="service-title">Filmación en Montaña</h3>
-        <p class="service-description">Tomas espectaculares de paisajes montañosos, senderos y actividades al aire libre desde ángulos imposibles.</p>
-      </div>
-
-      <div class="service-card animate-in delay-3">
-        <div class="service-icon">🏖️</div>
-        <h3 class="service-title">Filmación en Playa</h3>
-        <p class="service-description">Imágenes aéreas impresionantes de costas, olas y eventos playeros con perspectivas únicas.</p>
-      </div>
-
-      <div class="service-card animate-in delay-3">
-        <div class="service-icon">🎬</div>
-        <h3 class="service-title">Producción Audiovisual</h3>
-        <p class="service-description">Servicios completos de filmación, edición y posproducción para crear contenido de alta calidad.</p>
-      </div>
-
-      <div class="service-card animate-in delay-3">
-        <div class="service-icon">🏢</div>
-        <h3 class="service-title">Servicios Corporativos</h3>
-        <p class="service-description">Filmación para empresas, publicidad, eventos y proyectos especiales con tecnología de punta.</p>
-      </div>
+      <!-- Los servicios se cargarán dinámicamente desde la API -->
+      <div id="servicesSpinner" class="spinner" style="display: block;"></div>
     </section>
 
-    <!-- Nueva sección de reservas -->
+    <!-- Sección de reservas -->
     <section class="reservation animate-in" id="reservas">
       <h2>Reserva Tu Servicio de Drone</h2>
+      
       <form id="reservationForm" class="reservation-form">
         <div class="form-group">
           <label for="service">Servicio que deseas reservar</label>
-          <select id="service" name="service" required>
+          <select id="service" name="service_id" required>
             <option value="">Selecciona un servicio</option>
-            <option value="montaña">Filmación en Montaña</option>
-            <option value="playa">Filmación en Playa</option>
-            <option value="produccion">Producción Audiovisual</option>
-            <option value="corporativo">Servicios Corporativos</option>
+            <!-- Se llenará dinámicamente -->
           </select>
         </div>
 
         <div class="form-group">
           <label for="date">Fecha de reserva</label>
-          <input type="text" id="date" name="date" placeholder="Selecciona una fecha" required>
+          <input type="text" id="date" name="booking_date" placeholder="Selecciona una fecha" required>
         </div>
 
         <div class="form-group">
           <label for="start-time">Hora de inicio</label>
-          <select id="start-time" name="start-time" required>
+          <select id="start-time" name="start_time" required>
             <option value="">Selecciona la hora</option>
-            <!-- Las opciones se llenarán con JavaScript -->
+            <!-- Se llenará dinámicamente según disponibilidad -->
           </select>
         </div>
 
         <div class="form-group">
           <label for="duration">Duración (horas)</label>
           <select id="duration" name="duration" required>
-            <option value="1">1 hora</option>
-            <option value="2">2 horas</option>
-            <option value="3">3 horas</option>
-            <option value="4">4 horas</option>
-            <option value="8">Día completo (8 horas)</option>
+            <option value="">Selecciona duración</option>
+            <!-- Se llenará dinámicamente según el servicio -->
           </select>
         </div>
 
         <div class="form-group">
           <label for="name">Nombre completo</label>
-          <input type="text" id="name" name="name" required>
+          <input type="text" id="name" name="client_name" required>
         </div>
 
         <div class="form-group">
           <label for="email">Correo electrónico</label>
-          <input type="email" id="email" name="email" required>
+          <input type="email" id="email" name="client_email" required>
         </div>
 
         <div class="form-group">
           <label for="phone">Teléfono</label>
-          <input type="tel" id="phone" name="phone" required>
+          <input type="tel" id="phone" name="client_phone" required>
         </div>
 
         <div class="form-group">
@@ -514,13 +96,29 @@
           <textarea id="comments" name="comments"></textarea>
         </div>
 
+        <div id="priceSummary" class="price-summary full-width">
+          <h4>Resumen de precios</h4>
+          <p>Servicio: <span id="summaryServiceName">-</span></p>
+          <p>Precio por hora: €<span id="summaryPricePerHour">0</span></p>
+          <p>Duración: <span id="summaryDuration">0</span> horas</p>
+          <p class="total">Total: €<span id="summaryTotal">0</span></p>
+        </div>
+
         <button type="submit" class="reservation-submit">Confirmar Reserva</button>
       </form>
 
       <div id="confirmationMessage" class="confirmation">
         <h3>¡Reserva Recibida!</h3>
         <p>Gracias por tu reserva. Te contactaremos pronto para confirmar los detalles.</p>
+        <p>Tu número de reserva: <strong><span id="bookingNumber"></span></strong></p>
       </div>
+
+      <div id="errorMessage" class="error-message">
+        <h3>Error al procesar la reserva</h3>
+        <p id="errorText">Ha ocurrido un error. Por favor, intenta nuevamente.</p>
+      </div>
+
+      <div id="reservationSpinner" class="spinner"></div>
     </section>
 
     <footer id="contacto">
@@ -536,136 +134,6 @@
 
   <!-- JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Función para simular el efecto de vuelo del drone
-      function simulateDroneFlight() {
-        const videoBackground = document.querySelector('.video-background');
-        let posX = 0;
-        let posY = 0;
-        let directionX = 1;
-        let directionY = 1;
-        
-        setInterval(() => {
-          // Cambiar dirección aleatoriamente
-          if (Math.random() > 0.95) directionX *= -1;
-          if (Math.random() > 0.95) directionY *= -1;
-          
-          // Actualizar posición
-          posX += directionX * 0.1;
-          posY += directionY * 0.1;
-          
-          // Limitar el movimiento
-          posX = Math.max(-5, Math.min(5, posX));
-          posY = Math.max(-5, Math.min(5, posY));
-          
-          // Aplicar transformación
-          videoBackground.style.transform = `translate(${posX}px, ${posY}px) scale(1.1)`;
-        }, 50);
-      }
-      
-      // Iniciar efecto de vuelo
-      simulateDroneFlight();
-      
-      // Manejar el botón de menú
-      const menuBtn = document.getElementById('menuBtn');
-      const navLinks = document.getElementById('navLinks');
-      
-      menuBtn.addEventListener('click', function() {
-        navLinks.classList.toggle('active');
-      });
-      
-      // Inicializar el selector de fecha con Flatpickr
-      const dateInput = document.getElementById('date');
-      const flatpickrInstance = flatpickr(dateInput, {
-        minDate: "today",
-        maxDate: new Date().fp_incr(90), // 90 días en el futuro
-        disable: [
-          function(date) {
-            // Deshabilitar días específicos si es necesario
-            // Por ejemplo, domingos:
-            return date.getDay() === 0;
-          }
-        ],
-        locale: {
-          firstDayOfWeek: 1, // Lunes como primer día de la semana
-          weekdays: {
-            shorthand: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
-            longhand: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
-          },
-          months: {
-            shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-            longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
-          }
-        },
-        dateFormat: "d/m/Y",
-        onChange: function(selectedDates, dateStr, instance) {
-          // Aquí puedes agregar lógica para cambiar horarios disponibles según la fecha
-          updateAvailableTimes(selectedDates[0]);
-        }
-      });
-      
-      // Llenar opciones de hora
-      function updateAvailableTimes(selectedDate) {
-        const startTimeSelect = document.getElementById('start-time');
-        startTimeSelect.innerHTML = ''; // Limpiar opciones existentes
-        
-        // Opciones predeterminadas
-        const defaultTimes = ['08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'];
-        
-        // Aquí podrías tener lógica para modificar horarios disponibles según fechas
-        // Por ejemplo, verificar en una base de datos qué horarios ya están reservados
-        
-        // Agregar opción vacía
-        const emptyOption = document.createElement('option');
-        emptyOption.value = '';
-        emptyOption.text = 'Selecciona la hora';
-        startTimeSelect.appendChild(emptyOption);
-        
-        // Agregar horarios disponibles
-        defaultTimes.forEach(time => {
-          const option = document.createElement('option');
-          option.value = time;
-          option.text = time;
-          startTimeSelect.appendChild(option);
-        });
-      }
-      
-      // Llenar horas iniciales
-      updateAvailableTimes(new Date());
-      
-      // Manejar el envío del formulario
-      const reservationForm = document.getElementById('reservationForm');
-      reservationForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Aquí puedes agregar código para validar y enviar los datos a un servidor
-        // Por ahora, mostraremos un mensaje de confirmación simulado
-        
-        // Ocultar formulario
-        reservationForm.style.display = 'none';
-        
-        // Mostrar confirmación
-        const confirmationMessage = document.getElementById('confirmationMessage');
-        confirmationMessage.style.display = 'block';
-        
-        // Opcional: Resetear el formulario después de un tiempo
-        setTimeout(() => {
-          reservationForm.reset();
-          reservationForm.style.display = 'grid';
-          confirmationMessage.style.display = 'none';
-        }, 5000);
-        
-        // En un caso real, aquí enviarías los datos a tu backend
-        console.log('Datos de reserva:', new FormData(reservationForm));
-      });
-    });
-    
-    // Función para desplazarse a la sección de reservas
-    function scrollToReservation() {
-      const reservationSection = document.getElementById('reservas');
-      reservationSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  </script>
+  <script src="js/booking.js"></script>
 </body>
 </html>
