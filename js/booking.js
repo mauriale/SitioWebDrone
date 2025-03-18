@@ -1,6 +1,5 @@
 // Configuración
 const API_BASE_URL = 'http://localhost:5000/api';
-const MAPS_PROXY_URL = `${API_BASE_URL}/maps`;
 
 // Variables globales
 let services = [];
@@ -72,74 +71,13 @@ function setupLocationField() {
   if (googleMapsLoaded && typeof google.maps.places.Autocomplete === 'function') {
     initGoogleMaps();
   } else {
-    // Caso contrario, implementar nuestra propia solución con el proxy
-    locationInput.addEventListener('input', debounce(function() {
-      const searchText = this.value.trim();
-      if (searchText.length < 3) return; // Esperar al menos 3 caracteres
+    // Evento para geocodificar la dirección cuando se pierde el foco
+    locationInput.addEventListener('blur', function() {
+      if (!locationInput.value || (marker && marker.getMap())) return;
       
-      // Usar nuestro proxy para obtener sugerencias
-      fetch(`${MAPS_PROXY_URL}/places/autocomplete?input=${encodeURIComponent(searchText)}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.predictions && data.predictions.length > 0) {
-            showAddressSuggestions(data.predictions, locationInput);
-          }
-        })
-        .catch(error => console.error('Error al obtener sugerencias:', error));
-    }, 300));
-  }
-  
-  // Evento para geocodificar la dirección cuando se pierde el foco
-  locationInput.addEventListener('blur', function() {
-    if (!locationInput.value || (marker && marker.getMap())) return;
-    
-    geocodeAddress(locationInput.value);
-  });
-}
-
-// Función para mostrar sugerencias de direcciones
-function showAddressSuggestions(predictions, inputElement) {
-  // Eliminar sugerencias anteriores
-  let existingSuggestions = document.getElementById('address-suggestions');
-  if (existingSuggestions) {
-    existingSuggestions.parentNode.removeChild(existingSuggestions);
-  }
-  
-  // Crear contenedor de sugerencias
-  const suggestionsContainer = document.createElement('div');
-  suggestionsContainer.id = 'address-suggestions';
-  suggestionsContainer.className = 'address-suggestions';
-  
-  // Crear lista de sugerencias
-  predictions.forEach(prediction => {
-    const suggestion = document.createElement('div');
-    suggestion.className = 'suggestion-item';
-    suggestion.textContent = prediction.description;
-    suggestion.addEventListener('click', function() {
-      inputElement.value = prediction.description;
-      
-      // Geocodificar la dirección seleccionada
-      geocodeAddress(prediction.description);
-      
-      // Eliminar sugerencias
-      suggestionsContainer.parentNode.removeChild(suggestionsContainer);
+      geocodeAddress(locationInput.value);
     });
-    
-    suggestionsContainer.appendChild(suggestion);
-  });
-  
-  // Insertar sugerencias después del input
-  inputElement.parentNode.insertBefore(suggestionsContainer, inputElement.nextSibling);
-  
-  // Cerrar sugerencias al hacer clic fuera
-  document.addEventListener('click', function closeDropdown(e) {
-    if (!suggestionsContainer.contains(e.target) && e.target !== inputElement) {
-      if (document.body.contains(suggestionsContainer)) {
-        suggestionsContainer.parentNode.removeChild(suggestionsContainer);
-      }
-      document.removeEventListener('click', closeDropdown);
-    }
-  });
+  }
 }
 
 // Función para geocodificar una dirección
@@ -150,7 +88,7 @@ function geocodeAddress(address) {
   const longitudeInput = document.getElementById('longitude');
   const mapContainer = document.getElementById('map-container');
   
-  // Primero intentar con la API de Google Maps directamente si está disponible
+  // Usar la API de Google Maps directamente
   if (googleMapsLoaded && typeof google.maps.Geocoder === 'function') {
     const geocoder = new google.maps.Geocoder();
     geocoder.geocode({ address: address }, function(results, status) {
@@ -158,17 +96,6 @@ function geocodeAddress(address) {
         updateMapWithLocation(results[0].geometry.location);
       }
     });
-  } else {
-    // Usar nuestro proxy
-    fetch(`${MAPS_PROXY_URL}/geocode?address=${encodeURIComponent(address)}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.results && data.results.length > 0) {
-          const location = data.results[0].geometry.location;
-          updateMapWithLocation(location);
-        }
-      })
-      .catch(error => console.error('Error al geocodificar:', error));
   }
 }
 
@@ -179,8 +106,8 @@ function updateMapWithLocation(location) {
   const mapContainer = document.getElementById('map-container');
   
   // Actualizar campos ocultos
-  latitudeInput.value = location.lat;
-  longitudeInput.value = location.lng;
+  latitudeInput.value = location.lat();
+  longitudeInput.value = location.lng();
   
   // Si Google Maps está cargado, actualizar el mapa interactivo
   if (googleMapsLoaded && map) {
@@ -193,19 +120,6 @@ function updateMapWithLocation(location) {
     setTimeout(() => {
       google.maps.event.trigger(map, 'resize');
     }, 100);
-  } else {
-    // Mostrar un mapa estático usando nuestro proxy
-    mapContainer.style.display = 'block';
-    mapContainer.innerHTML = '';
-    
-    const img = document.createElement('img');
-    img.src = `${MAPS_PROXY_URL}/static-map?center=${location.lat},${location.lng}&zoom=15&size=600x200&markers=color:red|${location.lat},${location.lng}`;
-    img.style.width = '100%';
-    img.style.height = '100%';
-    img.style.objectFit = 'cover';
-    img.alt = 'Mapa de ubicación';
-    
-    mapContainer.appendChild(img);
   }
 }
 
@@ -339,16 +253,6 @@ function reverseGeocode(lat, lng) {
         locationInput.value = results[0].formatted_address;
       }
     });
-  } else {
-    // Usar nuestro proxy
-    fetch(`${MAPS_PROXY_URL}/reverse-geocode?lat=${lat}&lng=${lng}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.results && data.results.length > 0) {
-          locationInput.value = data.results[0].formatted_address;
-        }
-      })
-      .catch(error => console.error('Error en geocodificación inversa:', error));
   }
 }
 
