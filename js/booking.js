@@ -1,5 +1,6 @@
 // Configuración
 const API_BASE_URL = 'http://localhost:5000/api';
+const MAPS_PROXY_URL = `${API_BASE_URL}/maps`;
 
 // Variables globales
 let services = [];
@@ -57,14 +58,156 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar Google Maps si está disponible
   if (googleMapsLoaded) {
     initGoogleMaps();
-    
-    // Ocultar el mensaje de instrucciones si Google Maps está disponible
-    const googleMapInfo = document.querySelector('.google-map-info');
-    if (googleMapInfo) {
-      googleMapInfo.style.display = 'none';
-    }
   }
+  
+  // Configurar el campo de ubicación
+  setupLocationField();
 });
+
+// Función para configurar el campo de ubicación con autocompletado
+function setupLocationField() {
+  const locationInput = document.getElementById('location');
+  
+  // Si Google Maps está disponible, usar el autocompletado nativo
+  if (googleMapsLoaded && typeof google.maps.places.Autocomplete === 'function') {
+    initGoogleMaps();
+  } else {
+    // Caso contrario, implementar nuestra propia solución con el proxy
+    locationInput.addEventListener('input', debounce(function() {
+      const searchText = this.value.trim();
+      if (searchText.length < 3) return; // Esperar al menos 3 caracteres
+      
+      // Usar nuestro proxy para obtener sugerencias
+      fetch(`${MAPS_PROXY_URL}/places/autocomplete?input=${encodeURIComponent(searchText)}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.predictions && data.predictions.length > 0) {
+            showAddressSuggestions(data.predictions, locationInput);
+          }
+        })
+        .catch(error => console.error('Error al obtener sugerencias:', error));
+    }, 300));
+  }
+  
+  // Evento para geocodificar la dirección cuando se pierde el foco
+  locationInput.addEventListener('blur', function() {
+    if (!locationInput.value || (marker && marker.getMap())) return;
+    
+    geocodeAddress(locationInput.value);
+  });
+}
+
+// Función para mostrar sugerencias de direcciones
+function showAddressSuggestions(predictions, inputElement) {
+  // Eliminar sugerencias anteriores
+  let existingSuggestions = document.getElementById('address-suggestions');
+  if (existingSuggestions) {
+    existingSuggestions.parentNode.removeChild(existingSuggestions);
+  }
+  
+  // Crear contenedor de sugerencias
+  const suggestionsContainer = document.createElement('div');
+  suggestionsContainer.id = 'address-suggestions';
+  suggestionsContainer.className = 'address-suggestions';
+  
+  // Crear lista de sugerencias
+  predictions.forEach(prediction => {
+    const suggestion = document.createElement('div');
+    suggestion.className = 'suggestion-item';
+    suggestion.textContent = prediction.description;
+    suggestion.addEventListener('click', function() {
+      inputElement.value = prediction.description;
+      
+      // Geocodificar la dirección seleccionada
+      geocodeAddress(prediction.description);
+      
+      // Eliminar sugerencias
+      suggestionsContainer.parentNode.removeChild(suggestionsContainer);
+    });
+    
+    suggestionsContainer.appendChild(suggestion);
+  });
+  
+  // Insertar sugerencias después del input
+  inputElement.parentNode.insertBefore(suggestionsContainer, inputElement.nextSibling);
+  
+  // Cerrar sugerencias al hacer clic fuera
+  document.addEventListener('click', function closeDropdown(e) {
+    if (!suggestionsContainer.contains(e.target) && e.target !== inputElement) {
+      if (document.body.contains(suggestionsContainer)) {
+        suggestionsContainer.parentNode.removeChild(suggestionsContainer);
+      }
+      document.removeEventListener('click', closeDropdown);
+    }
+  });
+}
+
+// Función para geocodificar una dirección
+function geocodeAddress(address) {
+  if (!address) return;
+  
+  const latitudeInput = document.getElementById('latitude');
+  const longitudeInput = document.getElementById('longitude');
+  const mapContainer = document.getElementById('map-container');
+  
+  // Primero intentar con la API de Google Maps directamente si está disponible
+  if (googleMapsLoaded && typeof google.maps.Geocoder === 'function') {
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: address }, function(results, status) {
+      if (status === 'OK' && results[0]) {
+        updateMapWithLocation(results[0].geometry.location);
+      }
+    });
+  } else {
+    // Usar nuestro proxy
+    fetch(`${MAPS_PROXY_URL}/geocode?address=${encodeURIComponent(address)}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.results && data.results.length > 0) {
+          const location = data.results[0].geometry.location;
+          updateMapWithLocation(location);
+        }
+      })
+      .catch(error => console.error('Error al geocodificar:', error));
+  }
+}
+
+// Función para actualizar el mapa con una ubicación
+function updateMapWithLocation(location) {
+  const latitudeInput = document.getElementById('latitude');
+  const longitudeInput = document.getElementById('longitude');
+  const mapContainer = document.getElementById('map-container');
+  
+  // Actualizar campos ocultos
+  latitudeInput.value = location.lat;
+  longitudeInput.value = location.lng;
+  
+  // Si Google Maps está cargado, actualizar el mapa interactivo
+  if (googleMapsLoaded && map) {
+    mapContainer.style.display = 'block';
+    map.setCenter(location);
+    marker.setPosition(location);
+    marker.setMap(map);
+    
+    // Optimizar visualización del mapa
+    setTimeout(() => {
+      google.maps.event.trigger(map, 'resize');
+    }, 100);
+  } else {
+    // Mostrar un mapa estático usando nuestro proxy
+    mapContainer.style.display = 'block';
+    mapContainer.innerHTML = '';
+    
+    const img = document.createElement('img');
+    img.src = `${MAPS_PROXY_URL}/static-map?center=${location.lat},${location.lng}&zoom=15&size=600x200&markers=color:red|${location.lat},${location.lng}`;
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    img.alt = 'Mapa de ubicación';
+    
+    mapContainer.appendChild(img);
+  }
+}
 
 // Función para inicializar Google Maps
 function initGoogleMaps() {
@@ -179,25 +322,45 @@ function initGoogleMaps() {
     longitudeInput.value = position.lng();
     
     // Obtener la dirección a partir de las coordenadas
+    reverseGeocode(position.lat(), position.lng());
+  });
+}
+
+// Función para geocodificación inversa (coordenadas a dirección)
+function reverseGeocode(lat, lng) {
+  const locationInput = document.getElementById('location');
+  
+  if (googleMapsLoaded && typeof google.maps.Geocoder === 'function') {
     const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ location: position }, function(results, status) {
+    const latlng = { lat: parseFloat(lat), lng: parseFloat(lng) };
+    
+    geocoder.geocode({ location: latlng }, function(results, status) {
       if (status === 'OK' && results[0]) {
         locationInput.value = results[0].formatted_address;
       }
     });
-  });
-  
-  // Mostrar el mapa cuando el campo recibe foco
-  locationInput.addEventListener('focus', function() {
-    if (latitudeInput.value && longitudeInput.value) {
-      mapContainer.style.display = 'block';
-      
-      // Optimizar visualización del mapa
-      setTimeout(() => {
-        google.maps.event.trigger(map, 'resize');
-      }, 100);
-    }
-  });
+  } else {
+    // Usar nuestro proxy
+    fetch(`${MAPS_PROXY_URL}/reverse-geocode?lat=${lat}&lng=${lng}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.results && data.results.length > 0) {
+          locationInput.value = data.results[0].formatted_address;
+        }
+      })
+      .catch(error => console.error('Error en geocodificación inversa:', error));
+  }
+}
+
+// Función utilitaria para limitar las llamadas (debounce)
+function debounce(func, wait) {
+  let timeout;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
 }
 
 // Función para cargar servicios desde la API
@@ -575,32 +738,6 @@ function validateForm() {
       element.classList.remove('invalid');
     }
   });
-  
-  // Validar coordenadas del mapa si Google Maps está disponible
-  if (googleMapsLoaded) {
-    const locationInput = document.getElementById('location');
-    const latitudeInput = document.getElementById('latitude');
-    const longitudeInput = document.getElementById('longitude');
-    
-    if (locationInput.value && (!latitudeInput.value || !longitudeInput.value)) {
-      // Si hay ubicación pero no coordenadas, intentar obtenerlas
-      const geocoder = new google.maps.Geocoder();
-      geocoder.geocode({ address: locationInput.value }, function(results, status) {
-        if (status === 'OK' && results[0]) {
-          const location = results[0].geometry.location;
-          latitudeInput.value = location.lat();
-          longitudeInput.value = location.lng();
-          
-          // Actualizar mapa
-          const mapContainer = document.getElementById('map-container');
-          mapContainer.style.display = 'block';
-          map.setCenter(location);
-          marker.setPosition(location);
-          marker.setMap(map);
-        }
-      });
-    }
-  }
   
   if (!isValid) {
     document.getElementById('errorText').textContent = 'Por favor, completa todos los campos requeridos.';
