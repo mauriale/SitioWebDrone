@@ -203,7 +203,6 @@ h1 {
 
 .form-group {
   margin-bottom: 20px;
-  position: relative;
 }
 
 .form-group label {
@@ -238,58 +237,6 @@ h1 {
 
 .form-group.full-width {
   grid-column: 1 / -1;
-}
-
-/* Estilos para el contenedor del mapa de Google Maps */
-#map-container {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  margin-top: 5px;
-  transition: all 0.3s ease;
-  overflow: hidden;
-}
-
-#map-container:hover {
-  box-shadow: 0 4px 15px rgba(255, 107, 0, 0.3);
-}
-
-.google-map-info {
-  font-size: 0.8rem;
-  color: #ddd;
-  margin-top: 5px;
-  text-align: right;
-}
-
-/* Estilos para las sugerencias de direcciones */
-.address-suggestions {
-  position: absolute;
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  background-color: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0 0 8px 8px;
-  z-index: 1000;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-  margin-top: -4px;
-}
-
-.suggestion-item {
-  padding: 10px 15px;
-  cursor: pointer;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  color: #DDD;
-  transition: background-color 0.2s;
-}
-
-.suggestion-item:hover, 
-.suggestion-item.active {
-  background-color: rgba(255, 107, 0, 0.3);
-}
-
-.suggestion-item:last-child {
-  border-bottom: none;
 }
 
 .reservation-submit {
@@ -582,31 +529,4 @@ footer {
 .numInputWrapper span.arrowDown {
   border-bottom-color: #FF6B00 !important;
   border-top-color: #FF6B00 !important;
-}
-
-/* Estilos para Google Maps Autocomplete */
-.pac-container {
-  background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 0 0 8px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-  margin-top: 2px;
-}
-
-.pac-item {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  color: #DDD;
-  padding: 8px 10px;
-}
-
-.pac-item:hover, .pac-item-selected {
-  background-color: rgba(255, 107, 0, 0.3);
-}
-
-.pac-item-query {
-  color: white;
-}
-
-.pac-matched {
-  color: #FF6B00;
 }
