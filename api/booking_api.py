@@ -10,6 +10,9 @@ import logging
 from logging.handlers import RotatingFileHandler
 import datetime
 
+# Importar el proxy de Google Maps
+from api.maps_proxy import maps_api
+
 # Añadir el directorio padre al path de Python para poder importar el módulo de la base de datos
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -53,6 +56,9 @@ logger = logging.getLogger(__name__)
 logger.info("Iniciando API de DroneVista")
 
 app = Flask(__name__)
+
+# Registrar el blueprint del proxy de Google Maps
+app.register_blueprint(maps_api, url_prefix='/api/maps')
 
 # Configurar CORS
 if config['api']['cors_enabled']:
