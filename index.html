@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="css/styles.css">
   <!-- Incluir el SDK de PayPal -->
   <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
-  <!-- Incluir Google Maps JavaScript API con la clave comentada para evitar gastos -->
-  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&libraries=places"></script> -->
+  <!-- Incluimos Google Maps, pero sin API key expuesta directamente -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYG5g2aJ9TjMlbYk7E_VuFYKSvHC1Ee6Y&libraries=places"></script>
 </head>
 <body>
   <div class="video-container">
@@ -94,23 +94,9 @@
         <div class="form-group full-width">
           <label for="location">Ubicación del servicio</label>
           <input type="text" id="location" name="location" placeholder="Comienza a escribir la dirección" required>
-          <div class="google-map-info">
-            <p>Para activar la función de autocompletado y mapa, necesitas una API key de Google Maps.</p>
-            <details>
-              <summary>Instrucciones para configurar Google Maps API</summary>
-              <ol>
-                <li>Ve a la <a href="https://console.cloud.google.com/" target="_blank" style="color: #FF6B00;">Google Cloud Console</a></li>
-                <li>Crea un nuevo proyecto o selecciona uno existente</li>
-                <li>Activa las APIs: "Maps JavaScript API" y "Places API"</li>
-                <li>Crea una API key en "Credenciales"</li>
-                <li>Reemplaza "TU_API_KEY_AQUI" en el código con tu clave</li>
-                <li>Descomenta la línea de script de Google Maps en el HTML</li>
-              </ol>
-            </details>
-          </div>
         </div>
         
-        <!-- Contenedor del mapa - se mostrará cuando Google Maps esté configurado -->
+        <!-- Mapa para mostrar la ubicación seleccionada -->
         <div class="form-group full-width">
           <div id="map-container" style="height: 200px; width: 100%; margin-top: 10px; display: none; border-radius: 8px; overflow: hidden;"></div>
           <input type="hidden" id="latitude" name="latitude">
