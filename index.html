@@ -8,8 +8,8 @@
   <link rel="stylesheet" href="css/styles.css">
   <!-- Incluir el SDK de PayPal -->
   <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
-  <!-- Incluir Google Maps JavaScript API -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAaRU4nc4ScsuEFC8_9DBAc8iVeFx6gPDQ&libraries=places"></script>
+  <!-- Incluir Google Maps JavaScript API con la clave comentada para evitar gastos -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=TU_API_KEY_AQUI&libraries=places"></script> -->
 </head>
 <body>
   <div class="video-container">
@@ -94,9 +94,23 @@
         <div class="form-group full-width">
           <label for="location">Ubicación del servicio</label>
           <input type="text" id="location" name="location" placeholder="Comienza a escribir la dirección" required>
+          <div class="google-map-info">
+            <p>Para activar la función de autocompletado y mapa, necesitas una API key de Google Maps.</p>
+            <details>
+              <summary>Instrucciones para configurar Google Maps API</summary>
+              <ol>
+                <li>Ve a la <a href="https://console.cloud.google.com/" target="_blank" style="color: #FF6B00;">Google Cloud Console</a></li>
+                <li>Crea un nuevo proyecto o selecciona uno existente</li>
+                <li>Activa las APIs: "Maps JavaScript API" y "Places API"</li>
+                <li>Crea una API key en "Credenciales"</li>
+                <li>Reemplaza "TU_API_KEY_AQUI" en el código con tu clave</li>
+                <li>Descomenta la línea de script de Google Maps en el HTML</li>
+              </ol>
+            </details>
+          </div>
         </div>
         
-        <!-- Nuevo: Mapa para mostrar la ubicación seleccionada -->
+        <!-- Contenedor del mapa - se mostrará cuando Google Maps esté configurado -->
         <div class="form-group full-width">
           <div id="map-container" style="height: 200px; width: 100%; margin-top: 10px; display: none; border-radius: 8px; overflow: hidden;"></div>
           <input type="hidden" id="latitude" name="latitude">
@@ -205,94 +219,6 @@
   <!-- JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="js/booking.js"></script>
-  
-  <!-- Script para Google Maps Places Autocomplete -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Inicializar el autocompletado de Google Places
-      const locationInput = document.getElementById('location');
-      const latitudeInput = document.getElementById('latitude');
-      const longitudeInput = document.getElementById('longitude');
-      const mapContainer = document.getElementById('map-container');
-      let map;
-      let marker;
-      
-      // Crear el autocompletado
-      const autocomplete = new google.maps.places.Autocomplete(locationInput, {
-        fields: ['formatted_address', 'geometry', 'name'],
-        types: ['address', 'establishment']
-      });
-      
-      // Inicializar el mapa (oculto inicialmente)
-      function initMap() {
-        // Posición inicial (centrada en España)
-        const defaultPosition = { lat: 40.416775, lng: -3.703790 };
-        
-        map = new google.maps.Map(mapContainer, {
-          center: defaultPosition,
-          zoom: 15,
-          mapTypeId: google.maps.MapTypeId.ROADMAP,
-          mapTypeControl: false,
-          streetViewControl: false
-        });
-        
-        // Crear el marcador inicial (oculto)
-        marker = new google.maps.Marker({
-          position: defaultPosition,
-          map: null,
-          draggable: true,
-          animation: google.maps.Animation.DROP
-        });
-        
-        // Permitir actualizar la ubicación al arrastrar el marcador
-        google.maps.event.addListener(marker, 'dragend', function() {
-          const position = marker.getPosition();
-          latitudeInput.value = position.lat();
-          longitudeInput.value = position.lng();
-          
-          // Obtener la dirección a partir de las coordenadas (geocoding inverso)
-          const geocoder = new google.maps.Geocoder();
-          geocoder.geocode({ location: position }, function(results, status) {
-            if (status === 'OK' && results[0]) {
-              locationInput.value = results[0].formatted_address;
-            }
-          });
-        });
-      }
-      
-      // Inicializar el mapa
-      initMap();
-      
-      // Manejar la selección de un lugar del autocompletado
-      autocomplete.addListener('place_changed', function() {
-        const place = autocomplete.getPlace();
-        
-        if (!place.geometry) {
-          // El usuario presionó enter sin seleccionar un lugar de la lista
-          return;
-        }
-        
-        // Mostrar el mapa
-        mapContainer.style.display = 'block';
-        
-        // Actualizar el mapa y el marcador
-        map.setCenter(place.geometry.location);
-        marker.setPosition(place.geometry.location);
-        marker.setMap(map);
-        
-        // Guardar coordenadas en los campos ocultos
-        latitudeInput.value = place.geometry.location.lat();
-        longitudeInput.value = place.geometry.location.lng();
-      });
-      
-      // Mostrar el mapa cuando el campo de ubicación recibe el foco
-      locationInput.addEventListener('focus', function() {
-        if (latitudeInput.value && longitudeInput.value) {
-          mapContainer.style.display = 'block';
-        }
-      });
-    });
-  </script>
   
   <!-- Script para el botón de PayPal -->
   <script>
