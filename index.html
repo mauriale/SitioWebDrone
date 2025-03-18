@@ -3,284 +3,219 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Servicios de Piloto de Drone</title>
+  <title>Servicios de Drones - Filmación, Fotografía y Más</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="css/styles.css">
-  <!-- Incluir el SDK de PayPal -->
-  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
-  <!-- Incluimos Google Maps, pero sin API key expuesta directamente -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYG5g2aJ9TjMlbYk7E_VuFYKSvHC1Ee6Y&libraries=places"></script>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="img/favicon.png">
 </head>
 <body>
+  <!-- Video de fondo -->
   <div class="video-container">
-    <video autoplay muted loop playsinline class="video-background">
-      <source src="tu-video-drone.mp4" type="video/mp4">
-      <img src="/api/placeholder/480/800" alt="Vista aérea desde un drone" class="video-background">
+    <video class="video-background" autoplay muted loop>
+      <source src="video/drone-background.mp4" type="video/mp4">
+      Tu navegador no soporta videos HTML5.
     </video>
   </div>
 
+  <!-- Contenido principal -->
   <div class="content">
+    <!-- Cabecera -->
     <header>
-      <div class="logo">DroneVista</div>
-      <ul class="nav-links" id="navLinks">
+      <div class="logo">DroneSky</div>
+      <button id="menuBtn" class="menu-btn"><i class="fas fa-bars"></i></button>
+      <ul id="navLinks" class="nav-links">
         <li><a href="#servicios">Servicios</a></li>
         <li><a href="#reservas">Reservas</a></li>
-        <li><a href="#donaciones">Apóyanos</a></li>
+        <li><a href="#nosotros">Nosotros</a></li>
         <li><a href="#contacto">Contacto</a></li>
+        <li><a href="#donaciones">Donar</a></li>
       </ul>
-      <button class="menu-btn" id="menuBtn">☰</button>
     </header>
 
+    <!-- Hero section -->
     <section class="hero">
-      <h1 class="animate-in">Servicios Profesionales de Piloto de Drone</h1>
-      <p class="tagline animate-in delay-1">Capturando perspectivas únicas desde el cielo</p>
-      <button class="cta-button animate-in delay-2" onclick="scrollToReservation()">Reservar Ahora</button>
+      <h1 class="animate-in">Captura el mundo desde las alturas</h1>
+      <p class="tagline animate-in delay-1">Servicios profesionales de drones para filmación y fotografía aérea</p>
+      <button class="cta-button animate-in delay-2" onclick="scrollToReservation()">Reserva ahora</button>
     </section>
 
-    <section class="services" id="servicios">
-      <!-- Los servicios se cargarán dinámicamente desde la API -->
-      <div id="servicesSpinner" class="spinner" style="display: block;"></div>
+    <!-- Servicios -->
+    <section id="servicios" class="services-section">
+      <h2>Nuestros Servicios</h2>
+      <div id="servicios" class="services">
+        <div id="servicesSpinner" class="spinner"></div>
+        <!-- Los servicios se cargarán dinámicamente con JavaScript -->
+      </div>
     </section>
 
-    <!-- Sección de reservas -->
-    <section class="reservation animate-in" id="reservas">
-      <h2>Reserva Tu Servicio de Drone</h2>
-      
+    <!-- Formulario de reserva -->
+    <section id="reservas" class="reservation">
+      <h2>Reserva tu servicio</h2>
       <form id="reservationForm" class="reservation-form">
+        <!-- Selección de servicio -->
         <div class="form-group">
-          <label for="service">Servicio que deseas reservar</label>
-          <select id="service" name="service_id" required>
+          <label for="service">Servicio:</label>
+          <select id="service" name="service" required>
             <option value="">Selecciona un servicio</option>
-            <!-- Se llenará dinámicamente -->
+            <!-- Opciones cargadas dinámicamente -->
           </select>
         </div>
 
+        <!-- Fecha -->
         <div class="form-group">
-          <label for="date">Fecha de reserva</label>
-          <input type="text" id="date" name="booking_date" placeholder="Selecciona una fecha" required>
+          <label for="date">Fecha:</label>
+          <input type="text" id="date" name="date" placeholder="Selecciona una fecha" required readonly>
         </div>
 
+        <!-- Hora -->
         <div class="form-group">
-          <label for="start-time">Hora de inicio</label>
+          <label for="start-time">Hora de inicio:</label>
           <select id="start-time" name="start_time" required>
             <option value="">Selecciona la hora</option>
-            <!-- Se llenará dinámicamente según disponibilidad -->
+            <!-- Opciones cargadas dinámicamente -->
           </select>
         </div>
 
+        <!-- Duración -->
         <div class="form-group">
-          <label for="duration">Duración (horas)</label>
+          <label for="duration">Duración:</label>
           <select id="duration" name="duration" required>
             <option value="">Selecciona duración</option>
-            <!-- Se llenará dinámicamente según el servicio -->
+            <!-- Opciones cargadas dinámicamente -->
           </select>
         </div>
 
+        <!-- Resumen de precios -->
+        <div id="priceSummary" class="price-summary">
+          <h4>Resumen de Precios</h4>
+          <p>Servicio: <span id="summaryServiceName"></span></p>
+          <p>Precio por hora: €<span id="summaryPricePerHour"></span></p>
+          <p>Duración: <span id="summaryDuration"></span> horas</p>
+          <p class="total">Total: €<span id="summaryTotal"></span></p>
+        </div>
+
+        <!-- Datos de contacto -->
         <div class="form-group">
-          <label for="name">Nombre completo</label>
-          <input type="text" id="name" name="client_name" required>
+          <label for="name">Nombre completo:</label>
+          <input type="text" id="name" name="name" placeholder="Tu nombre" required>
         </div>
 
         <div class="form-group">
-          <label for="email">Correo electrónico</label>
-          <input type="email" id="email" name="client_email" required>
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="Tu email" required>
         </div>
 
         <div class="form-group">
-          <label for="phone">Teléfono</label>
-          <input type="tel" id="phone" name="client_phone" required>
+          <label for="phone">Teléfono:</label>
+          <input type="tel" id="phone" name="phone" placeholder="Tu número de teléfono" required>
         </div>
 
+        <!-- Ubicación -->
         <div class="form-group full-width">
-          <label for="location">Ubicación del servicio</label>
-          <input type="text" id="location" name="location" placeholder="Comienza a escribir la dirección" required>
-        </div>
-        
-        <!-- Mapa para mostrar la ubicación seleccionada -->
-        <div class="form-group full-width">
-          <div id="map-container" style="height: 200px; width: 100%; margin-top: 10px; display: none; border-radius: 8px; overflow: hidden;"></div>
+          <label for="location">Ubicación del servicio:</label>
+          <input type="text" id="location" name="location" placeholder="Introduce una dirección" required>
           <input type="hidden" id="latitude" name="latitude">
           <input type="hidden" id="longitude" name="longitude">
+          <div id="map-container" style="height: 200px; margin-top: 10px; display: none;"></div>
+          <p class="google-map-info">Puedes arrastrar el marcador para ajustar la ubicación exacta</p>
         </div>
 
+        <!-- Instrucciones especiales -->
         <div class="form-group full-width">
-          <label for="comments">Detalles adicionales o requisitos especiales</label>
-          <textarea id="comments" name="comments"></textarea>
+          <label for="special-instructions">Instrucciones especiales (opcional):</label>
+          <textarea id="special-instructions" name="special_instructions" placeholder="Cualquier detalle adicional que debamos conocer"></textarea>
         </div>
 
-        <div id="priceSummary" class="price-summary full-width">
-          <h4>Resumen de precios</h4>
-          <p>Servicio: <span id="summaryServiceName">-</span></p>
-          <p>Precio por hora: €<span id="summaryPricePerHour">0</span></p>
-          <p>Duración: <span id="summaryDuration">0</span> horas</p>
-          <p class="total">Total: €<span id="summaryTotal">0</span></p>
-        </div>
-
+        <!-- Submit button -->
         <button type="submit" class="reservation-submit">Confirmar Reserva</button>
+        
+        <!-- Spinner de carga -->
+        <div id="reservationSpinner" class="spinner" style="display: none;"></div>
+        
+        <!-- Mensaje de confirmación -->
+        <div id="confirmationMessage" class="confirmation" style="display: none;">
+          <i class="fas fa-check-circle" style="font-size: 2rem; margin-bottom: 15px;"></i>
+          <h3>¡Reserva Confirmada!</h3>
+          <p>Hemos recibido tu solicitud de reserva. Tu número de referencia es: <strong id="bookingNumber"></strong></p>
+          <p>Recibirás un email con los detalles de la confirmación y las instrucciones a seguir.</p>
+        </div>
+        
+        <!-- Mensaje de error -->
+        <div id="errorMessage" class="error-message" style="display: none;">
+          <i class="fas fa-exclamation-circle" style="font-size: 2rem; margin-bottom: 15px;"></i>
+          <h3>Error</h3>
+          <p id="errorText">Ha ocurrido un error. Por favor, intenta nuevamente.</p>
+        </div>
       </form>
-
-      <div id="confirmationMessage" class="confirmation">
-        <h3>¡Reserva Recibida!</h3>
-        <p>Gracias por tu reserva. Te contactaremos pronto para confirmar los detalles.</p>
-        <p>Tu número de reserva: <strong><span id="bookingNumber"></span></strong></p>
-      </div>
-
-      <div id="errorMessage" class="error-message">
-        <h3>Error al procesar la reserva</h3>
-        <p id="errorText">Ha ocurrido un error. Por favor, intenta nuevamente.</p>
-      </div>
-
-      <div id="reservationSpinner" class="spinner"></div>
     </section>
 
-    <!-- Nueva sección de donaciones -->
-    <section class="donation-section animate-in" id="donaciones">
-      <h2>Apoya Nuestro Trabajo</h2>
+    <!-- Sección de donaciones -->
+    <section id="donaciones" class="donation-section">
+      <h2>Apoya Nuestro Proyecto</h2>
+      
       <div class="donation-content">
         <div class="donation-text">
-          <p>Si disfrutas de nuestro contenido y servicios, considera hacer una donación para ayudarnos a seguir mejorando. Tu apoyo nos permite:</p>
+          <p>Estamos desarrollando nuevas tecnologías de drones para:</p>
           <ul>
-            <li>Invertir en equipos de última generación</li>
-            <li>Mejorar la calidad de nuestras producciones</li>
-            <li>Explorar nuevas locaciones para capturas únicas</li>
-            <li>Mantener precios accesibles para todos</li>
+            <li>Monitoreo ambiental y conservación de ecosistemas</li>
+            <li>Búsqueda y rescate en áreas de difícil acceso</li>
+            <li>Proyectos educativos para enseñar tecnología a jóvenes</li>
           </ul>
-          <p>¡Cualquier cantidad hace la diferencia!</p>
+          <p>Tu donación nos ayuda a continuar innovando y generando un impacto positivo.</p>
         </div>
         
         <div class="donation-options">
-          <h3>Apóyanos con PayPal</h3>
-          <div class="paypal-button-container">
-            <div class="donation-amounts">
-              <label>
-                <input type="radio" name="donation-amount" value="5" checked> €5
-              </label>
-              <label>
-                <input type="radio" name="donation-amount" value="10"> €10
-              </label>
-              <label>
-                <input type="radio" name="donation-amount" value="20"> €20
-              </label>
-              <label>
-                <input type="radio" name="donation-amount" value="50"> €50
-              </label>
-              <label>
-                <input type="radio" name="donation-amount" value="custom"> Otra
-              </label>
-            </div>
-            
-            <div class="custom-amount" style="display: none; margin: 10px 0;">
-              <label>€</label>
-              <input type="number" id="custom-donation-amount" min="1" value="15">
-            </div>
-            
-            <!-- Contenedor para el botón de PayPal generado dinámicamente -->
-            <div id="paypal-button-container" style="margin-top: 20px;"></div>
-            
-            <!-- Enlace directo a PayPal.me como alternativa -->
-            <div style="margin-top: 20px; text-align: center;">
-              <p>O visita nuestro enlace directo de PayPal:</p>
-              <a href="https://paypal.me/Inocencio" target="_blank" class="cta-button" style="display: inline-block; margin-top: 10px;">PayPal.me/Inocencio</a>
-            </div>
+          <h3>Realiza tu aportación</h3>
+          
+          <div class="donation-amounts">
+            <label>
+              <input type="radio" name="amount" value="5"> €5
+            </label>
+            <label>
+              <input type="radio" name="amount" value="10"> €10
+            </label>
+            <label>
+              <input type="radio" name="amount" value="20" checked> €20
+            </label>
+            <label>
+              <input type="radio" name="amount" value="50"> €50
+            </label>
+            <label>
+              <input type="radio" name="amount" value="custom"> Otra cantidad
+            </label>
           </div>
           
-          <div class="donation-note" style="margin-top: 20px; font-size: 0.9em;">
-            <p>Para más opciones de donación, visita nuestra <a href="donaciones.html" style="color: #FF6B00; text-decoration: underline;">página de donaciones</a>.</p>
+          <div id="paypal-button-container" class="paypal-button-container">
+            <!-- PayPal button will be rendered here -->
+          </div>
+          
+          <div class="donation-note">
+            <p>* Todas las donaciones son procesadas de forma segura.</p>
+            <p>* Recibirás un recibo por email.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <footer id="contacto">
-      <p>© 2025 DroneVista. Todos los derechos reservados.</p>
-      <p>Email: info@dronevista.com | Teléfono: +1 234 567 890</p>
+    <!-- Footer -->
+    <footer>
+      <p>&copy; 2023 DroneSky - Todos los derechos reservados</p>
       <div class="social-links">
-        <a href="#" class="social-link">📱</a>
-        <a href="#" class="social-link">📷</a>
-        <a href="#" class="social-link">📹</a>
+        <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
       </div>
     </footer>
   </div>
 
-  <!-- JavaScript -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="js/maps-proxy.js"></script>
+  <!-- Cargar Google Maps a través del proxy seguro -->
+  <script src="https://maps.googleapis.com/maps/api/js?libraries=places&callback=initMap" async defer></script>
   <script src="js/booking.js"></script>
-  
-  <!-- Script para el botón de PayPal -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Gestionar la selección de cantidad de donación
-      const donationRadios = document.querySelectorAll('input[name="donation-amount"]');
-      const customAmountContainer = document.querySelector('.custom-amount');
-      const customAmountInput = document.getElementById('custom-donation-amount');
-      
-      // Función para obtener el monto de donación seleccionado
-      function getSelectedAmount() {
-        const selectedRadio = document.querySelector('input[name="donation-amount"]:checked');
-        if (selectedRadio.value === 'custom') {
-          return parseFloat(customAmountInput.value) || 5; // Valor por defecto si no es válido
-        } else {
-          return parseFloat(selectedRadio.value);
-        }
-      }
-      
-      // Mostrar/ocultar el campo de cantidad personalizada
-      donationRadios.forEach(radio => {
-        radio.addEventListener('change', function() {
-          if (this.value === 'custom') {
-            customAmountContainer.style.display = 'block';
-          } else {
-            customAmountContainer.style.display = 'none';
-          }
-          
-          // Actualizar el botón de PayPal con la nueva cantidad
-          renderPayPalButton();
-        });
-      });
-      
-      // Actualizar cuando cambia la cantidad personalizada
-      customAmountInput.addEventListener('input', function() {
-        if (this.value < 1) this.value = 1;
-        renderPayPalButton();
-      });
-      
-      // Función para renderizar el botón de PayPal
-      function renderPayPalButton() {
-        const paypalContainer = document.getElementById('paypal-button-container');
-        paypalContainer.innerHTML = ''; // Limpiar contenedor
-        
-        paypal.Buttons({
-          style: {
-            color: 'blue',
-            shape: 'pill',
-            label: 'donate'
-          },
-          createOrder: function(data, actions) {
-            return actions.order.create({
-              purchase_units: [{
-                amount: {
-                  value: getSelectedAmount().toString(),
-                  currency_code: 'EUR'
-                },
-                description: 'Donación a DroneVista'
-              }],
-              application_context: {
-                shipping_preference: 'NO_SHIPPING'
-              }
-            });
-          },
-          onApprove: function(data, actions) {
-            return actions.order.capture().then(function(details) {
-              // Mostrar mensaje de agradecimiento
-              alert('¡Gracias ' + details.payer.name.given_name + ' por tu donación!');
-            });
-          }
-        }).render('#paypal-button-container');
-      }
-      
-      // Renderizar el botón de PayPal inicialmente
-      renderPayPalButton();
-    });
-  </script>
 </body>
 </html>
