@@ -1,0 +1,8 @@
+{
+  "api_key": "GOOGLE_MAPS_API_KEY_AQUI",
+  "allowed_referers": ["localhost", "yourdomain.com"],
+  "proxy_settings": {
+    "cache_timeout": 3600,
+    "max_requests_per_day": 2500
+  }
+}
