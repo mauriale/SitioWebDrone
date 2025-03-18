@@ -1,144 +1,78 @@
-# DroneVista - Plataforma de Servicios de Drone
+# Sitio Web Drone - Sistema de Reservas con Maps API Seguro
 
-DroneVista es una plataforma completa para gestionar servicios de drone y reservas. Incluye un sitio web con un sistema de reservas conectado a una base de datos SQLite, una API REST y un panel de administración.
+Este repositorio contiene el código para un sitio web de servicios de drones con sistema de reservas, utilizando un proxy seguro para Google Maps API.
 
 ## Características
 
-- 🌐 Sitio web responsive con video de fondo
-- 📅 Sistema de reservas con calendario interactivo
-- 🛢️ Base de datos SQLite para almacenamiento de datos
-- 🔌 API REST para interacción con la base de datos
-- 🔧 Panel de administración para gestionar reservas y servicios
-- 📱 Adaptable a dispositivos móviles y de escritorio
+- Diseño responsivo y moderno
+- Sistema de reserva de servicios de drones
+- Integración con Google Maps (a través de un proxy seguro)
+- Autocompletado de direcciones
+- Visualización de ubicaciones en el mapa
+- Cálculo de precios basado en servicios y duración
+- Sistema de gestión de disponibilidad de horarios
+- Procesamiento de pagos (preparado para integración con PayPal)
 
-## Requisitos del Sistema
+## Estructura de Archivos
 
-- Python 3.7 o superior
-- Pip (gestor de paquetes de Python)
-- Navegador web moderno
+- `index.html` - Página principal
+- `css/styles.css` - Estilos del sitio
+- `js/booking.js` - Lógica principal del sistema de reservas
+- `js/maps-proxy.js` - Proxy seguro para Google Maps API
+- `video/drone-background.mp4` - Video de fondo (no incluido en el repositorio)
 
-## Instalación
+## Proxy Seguro para Google Maps API
 
-1. **Clonar el repositorio**:
-   ```bash
-   git clone https://github.com/mauriale/SitioWebDrone.git
-   cd SitioWebDrone
-   ```
+Se implementó un proxy seguro para proteger la clave API de Google Maps, evitando su exposición directa en el frontend. Este enfoque proporciona una capa adicional de seguridad al manejar todas las solicitudes a la API de Google Maps a través de un backend intermedio.
 
-2. **Instalar dependencias**:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### Cómo funciona el proxy:
 
-3. **Configuración**:
-   - Revisa y ajusta el archivo de configuración en `config/db_config.json` según tus necesidades.
+1. El frontend nunca ve la API key directamente
+2. Todas las solicitudes a Google Maps API se canalizan a través del servidor proxy
+3. El servidor proxy añade la API key a las solicitudes
+4. Las respuestas se devuelven al cliente sin exponer información sensible
 
-## Uso
+### Implementación:
 
-### Iniciar el Servidor
+El módulo `maps-proxy.js` proporciona métodos para interactuar con las diferentes APIs de Google Maps:
 
-Para iniciar todos los servicios (API y servidor web) con un solo comando:
-
-```bash
-python start_server.py
-```
-
-Opciones disponibles:
-- `-c, --config`: Especificar ruta al archivo de configuración personalizado
-- `-d, --debug`: Iniciar en modo debug
-
-### Inicializar la Base de Datos
-
-La base de datos se inicializa automáticamente al iniciar el servidor. Si necesitas reiniciarla manualmente:
-
-```bash
-python database/create_db.py
-```
-
-### Acceso a los Servicios
-
-Una vez iniciado el servidor, puedes acceder a:
-
-- **Sitio Web**: http://localhost:5001
-- **Panel de Administración**: http://localhost:5001/admin
-- **API REST**: http://localhost:5000/api
-
-## Estructura del Proyecto
-
-```
-SitioWebDrone/
-├── api/
-│   └── booking_api.py         # API REST
-├── config/
-│   └── db_config.json         # Configuración
-├── css/
-│   └── styles.css             # Estilos del sitio web
-├── database/
-│   ├── create_db.py           # Script para crear la base de datos
-│   └── db_manager.py          # Gestor de la base de datos
-├── js/
-│   └── booking.js             # Lógica JavaScript para reservas
-├── logs/                      # Directorio para logs
-├── admin/
-│   └── index.html             # Panel de administración
-├── index.html                 # Página principal
-├── requirements.txt           # Dependencias de Python
-├── start_server.py            # Script para iniciar el servidor
-└── README.md                  # Documentación
-```
-
-## API REST
-
-La API proporciona los siguientes endpoints:
-
-### Servicios
-
-- `GET /api/services` - Obtener todos los servicios
-- `GET /api/services/{id}` - Obtener un servicio específico
-- `GET /api/services/{id}/available-times?date={date}` - Obtener horarios disponibles para una fecha
-
-### Reservas
-
-- `GET /api/bookings` - Obtener todas las reservas
-- `GET /api/bookings/{id}` - Obtener una reserva específica
-- `POST /api/bookings` - Crear una nueva reserva
-- `PUT /api/bookings/{id}/status` - Actualizar estado de una reserva
+- Geocodificación (obtener coordenadas a partir de direcciones)
+- Autocompletado de lugares
+- Detalles de lugares
+- Direcciones entre dos puntos
 
 ## Configuración
 
-El archivo `config/db_config.json` permite configurar:
+Para instalar y configurar el proyecto:
 
-- Rutas y parámetros de la base de datos
-- Configuración del servidor API (host, puerto, CORS)
-- Logging
-- Notificaciones por correo electrónico
-- Seguridad y autenticación
+1. Clonar el repositorio
+2. Configurar la clave API de Google Maps en el archivo `js/maps-proxy.js`
+3. Configurar la URL del backend en las constantes `API_BASE_URL` y `MAPS_PROXY_URL` en `js/booking.js`
+4. Servir los archivos con un servidor web (por ejemplo, Apache, Nginx o cualquier hosting estático)
 
-## Personalización
+### Configuración de la API Key:
 
-### Servicios
+En un entorno de producción, la API key debería almacenarse únicamente en el servidor backend y nunca en el código del cliente.
 
-Para añadir o modificar servicios, puedes:
+## Consideraciones de Seguridad
 
-1. Editar la base de datos directamente
-2. Modificar el archivo `database/create_db.py` y reinicializar la base de datos
+- La clave API de Google Maps nunca se expone directamente en el cliente
+- Todas las llamadas a la API pasan por el proxy del servidor
+- Se implementan restricciones por dominio y referrer en la consola de Google Cloud Platform
+- El código incluye mecanismos para prevenir solicitudes excesivas (throttling)
 
-### Diseño
+## Desarrollo
 
-Para personalizar el aspecto visual:
+Para trabajar en el desarrollo:
 
-1. Editar el archivo `css/styles.css`
-2. Modificar las plantillas HTML en `index.html` y `admin/index.html`
-3. Reemplazar el video de fondo `tu-video-drone.mp4`
+1. Modificar los archivos HTML, CSS o JavaScript según sea necesario
+2. Para cambiar la configuración del proxy de Maps, editar el archivo `js/maps-proxy.js`
+3. Para modificar la lógica de reservas, editar `js/booking.js`
 
 ## Licencia
 
-Este proyecto está licenciado bajo los términos de la licencia MIT. Consulta el archivo LICENSE para más detalles.
+[MIT License](LICENSE)
 
-## Soporte
+## Contacto
 
-Para soporte o informar problemas, por favor crea un issue en el repositorio de GitHub.
-
----
-
-© 2025 DroneVista. Todos los derechos reservados.
+Para más información o soporte, contactar a [mauriale@gmail.com](mailto:mauriale@gmail.com)
