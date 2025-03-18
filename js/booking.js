@@ -9,8 +9,12 @@ let availableTimes = [];
 let map = null;
 let marker = null;
 let autocomplete = null;
+let googleMapsLoaded = false;
 
 document.addEventListener('DOMContentLoaded', function() {
+  // Verificar si Google Maps está cargado
+  googleMapsLoaded = (typeof google !== 'undefined' && typeof google.maps !== 'undefined');
+  
   // Función para simular el efecto de vuelo del drone
   function simulateDroneFlight() {
     const videoBackground = document.querySelector('.video-background');
@@ -50,12 +54,22 @@ document.addEventListener('DOMContentLoaded', function() {
   // Inicializar el formulario
   initReservationForm();
   
-  // Inicializar Google Maps
-  initGoogleMaps();
+  // Inicializar Google Maps si está disponible
+  if (googleMapsLoaded) {
+    initGoogleMaps();
+    
+    // Ocultar el mensaje de instrucciones si Google Maps está disponible
+    const googleMapInfo = document.querySelector('.google-map-info');
+    if (googleMapInfo) {
+      googleMapInfo.style.display = 'none';
+    }
+  }
 });
 
 // Función para inicializar Google Maps
 function initGoogleMaps() {
+  if (!googleMapsLoaded) return;
+  
   const locationInput = document.getElementById('location');
   const latitudeInput = document.getElementById('latitude');
   const longitudeInput = document.getElementById('longitude');
@@ -562,28 +576,30 @@ function validateForm() {
     }
   });
   
-  // Validar coordenadas del mapa si la ubicación está completada
-  const locationInput = document.getElementById('location');
-  const latitudeInput = document.getElementById('latitude');
-  const longitudeInput = document.getElementById('longitude');
-  
-  if (locationInput.value && (!latitudeInput.value || !longitudeInput.value)) {
-    // Si hay ubicación pero no coordenadas, intentar obtenerlas
-    const geocoder = new google.maps.Geocoder();
-    geocoder.geocode({ address: locationInput.value }, function(results, status) {
-      if (status === 'OK' && results[0]) {
-        const location = results[0].geometry.location;
-        latitudeInput.value = location.lat();
-        longitudeInput.value = location.lng();
-        
-        // Actualizar mapa
-        const mapContainer = document.getElementById('map-container');
-        mapContainer.style.display = 'block';
-        map.setCenter(location);
-        marker.setPosition(location);
-        marker.setMap(map);
-      }
-    });
+  // Validar coordenadas del mapa si Google Maps está disponible
+  if (googleMapsLoaded) {
+    const locationInput = document.getElementById('location');
+    const latitudeInput = document.getElementById('latitude');
+    const longitudeInput = document.getElementById('longitude');
+    
+    if (locationInput.value && (!latitudeInput.value || !longitudeInput.value)) {
+      // Si hay ubicación pero no coordenadas, intentar obtenerlas
+      const geocoder = new google.maps.Geocoder();
+      geocoder.geocode({ address: locationInput.value }, function(results, status) {
+        if (status === 'OK' && results[0]) {
+          const location = results[0].geometry.location;
+          latitudeInput.value = location.lat();
+          longitudeInput.value = location.lng();
+          
+          // Actualizar mapa
+          const mapContainer = document.getElementById('map-container');
+          mapContainer.style.display = 'block';
+          map.setCenter(location);
+          marker.setPosition(location);
+          marker.setMap(map);
+        }
+      });
+    }
   }
   
   if (!isValid) {
