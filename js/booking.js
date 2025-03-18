@@ -6,6 +6,9 @@ let services = [];
 let selectedService = null;
 let flatpickrInstance = null;
 let availableTimes = [];
+let map = null;
+let marker = null;
+let autocomplete = null;
 
 document.addEventListener('DOMContentLoaded', function() {
   // Función para simular el efecto de vuelo del drone
@@ -46,7 +49,142 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Inicializar el formulario
   initReservationForm();
+  
+  // Inicializar Google Maps
+  initGoogleMaps();
 });
+
+// Función para inicializar Google Maps
+function initGoogleMaps() {
+  const locationInput = document.getElementById('location');
+  const latitudeInput = document.getElementById('latitude');
+  const longitudeInput = document.getElementById('longitude');
+  const mapContainer = document.getElementById('map-container');
+  
+  // Posición inicial (centrada en España)
+  const defaultPosition = { lat: 40.416775, lng: -3.703790 };
+  
+  // Inicializar el mapa
+  map = new google.maps.Map(mapContainer, {
+    center: defaultPosition,
+    zoom: 15,
+    mapTypeId: google.maps.MapTypeId.ROADMAP,
+    mapTypeControl: false,
+    streetViewControl: false,
+    styles: [
+      { elementType: 'geometry', stylers: [{ color: '#242f3e' }] },
+      { elementType: 'labels.text.stroke', stylers: [{ color: '#242f3e' }] },
+      { elementType: 'labels.text.fill', stylers: [{ color: '#746855' }] },
+      {
+        featureType: 'administrative.locality',
+        elementType: 'labels.text.fill',
+        stylers: [{ color: '#d59563' }]
+      },
+      {
+        featureType: 'poi',
+        elementType: 'labels.text.fill',
+        stylers: [{ color: '#d59563' }]
+      },
+      {
+        featureType: 'road',
+        elementType: 'geometry',
+        stylers: [{ color: '#38414e' }]
+      },
+      {
+        featureType: 'road',
+        elementType: 'geometry.stroke',
+        stylers: [{ color: '#212a37' }]
+      },
+      {
+        featureType: 'road',
+        elementType: 'labels.text.fill',
+        stylers: [{ color: '#9ca5b3' }]
+      },
+      {
+        featureType: 'water',
+        elementType: 'geometry',
+        stylers: [{ color: '#17263c' }]
+      },
+      {
+        featureType: 'water',
+        elementType: 'labels.text.fill',
+        stylers: [{ color: '#515c6d' }]
+      },
+      {
+        featureType: 'water',
+        elementType: 'labels.text.stroke',
+        stylers: [{ color: '#17263c' }]
+      }
+    ]
+  });
+  
+  // Crear el marcador
+  marker = new google.maps.Marker({
+    position: defaultPosition,
+    map: null,
+    draggable: true,
+    animation: google.maps.Animation.DROP
+  });
+  
+  // Inicializar autocompletado
+  autocomplete = new google.maps.places.Autocomplete(locationInput, {
+    fields: ['formatted_address', 'geometry', 'name'],
+    types: ['address', 'establishment']
+  });
+  
+  // Evento cuando se selecciona un lugar del autocompletado
+  autocomplete.addListener('place_changed', function() {
+    const place = autocomplete.getPlace();
+    
+    if (!place.geometry) {
+      return;
+    }
+    
+    // Mostrar el mapa
+    mapContainer.style.display = 'block';
+    
+    // Actualizar el mapa y el marcador
+    map.setCenter(place.geometry.location);
+    marker.setPosition(place.geometry.location);
+    marker.setMap(map);
+    
+    // Guardar coordenadas
+    latitudeInput.value = place.geometry.location.lat();
+    longitudeInput.value = place.geometry.location.lng();
+    
+    // Optimizar visualización del mapa
+    setTimeout(() => {
+      google.maps.event.trigger(map, 'resize');
+    }, 100);
+  });
+  
+  // Permitir actualizar la ubicación al arrastrar el marcador
+  google.maps.event.addListener(marker, 'dragend', function() {
+    const position = marker.getPosition();
+    latitudeInput.value = position.lat();
+    longitudeInput.value = position.lng();
+    
+    // Obtener la dirección a partir de las coordenadas
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ location: position }, function(results, status) {
+      if (status === 'OK' && results[0]) {
+        locationInput.value = results[0].formatted_address;
+      }
+    });
+  });
+  
+  // Mostrar el mapa cuando el campo recibe foco
+  locationInput.addEventListener('focus', function() {
+    if (latitudeInput.value && longitudeInput.value) {
+      mapContainer.style.display = 'block';
+      
+      // Optimizar visualización del mapa
+      setTimeout(() => {
+        google.maps.event.trigger(map, 'resize');
+      }, 100);
+    }
+  });
+}
 
 // Función para cargar servicios desde la API
 async function loadServices() {
@@ -423,6 +561,30 @@ function validateForm() {
       element.classList.remove('invalid');
     }
   });
+  
+  // Validar coordenadas del mapa si la ubicación está completada
+  const locationInput = document.getElementById('location');
+  const latitudeInput = document.getElementById('latitude');
+  const longitudeInput = document.getElementById('longitude');
+  
+  if (locationInput.value && (!latitudeInput.value || !longitudeInput.value)) {
+    // Si hay ubicación pero no coordenadas, intentar obtenerlas
+    const geocoder = new google.maps.Geocoder();
+    geocoder.geocode({ address: locationInput.value }, function(results, status) {
+      if (status === 'OK' && results[0]) {
+        const location = results[0].geometry.location;
+        latitudeInput.value = location.lat();
+        longitudeInput.value = location.lng();
+        
+        // Actualizar mapa
+        const mapContainer = document.getElementById('map-container');
+        mapContainer.style.display = 'block';
+        map.setCenter(location);
+        marker.setPosition(location);
+        marker.setMap(map);
+      }
+    });
+  }
   
   if (!isValid) {
     document.getElementById('errorText').textContent = 'Por favor, completa todos los campos requeridos.';
