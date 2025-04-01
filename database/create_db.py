@@ -93,7 +93,8 @@ services = [
     ('montaña', 'Filmación en Montaña', 'Tomas espectaculares de paisajes montañosos, senderos y actividades al aire libre desde ángulos imposibles.', '🏔️', 120, 2, 8),
     ('playa', 'Filmación en Playa', 'Imágenes aéreas impresionantes de costas, olas y eventos playeros con perspectivas únicas.', '🏖️', 100, 1, 6),
     ('produccion', 'Producción Audiovisual', 'Servicios completos de filmación, edición y posproducción para crear contenido de alta calidad.', '🎬', 150, 3, 10),
-    ('corporativo', 'Servicios Corporativos', 'Filmación para empresas, publicidad, eventos y proyectos especiales con tecnología de punta.', '🏢', 180, 4, 12)
+    ('corporativo', 'Servicios Corporativos', 'Filmación para empresas, publicidad, eventos y proyectos especiales con tecnología de punta.', '🏢', 180, 4, 12),
+    ('telemetria', 'Telemetría y Modelado 3D', 'Transformación de edificaciones, casas y espacios en archivos 3D de Blender para impresiones 3D o remodelaciones con software como Sketchup o Blender.', '🏛️', 200, 3, 8)
 ]
 
 cursor.executemany('''
@@ -140,7 +141,17 @@ available_times = [
     ('corporativo', '12:00'),
     ('corporativo', '13:00'),
     ('corporativo', '14:00'),
-    ('corporativo', '15:00')
+    ('corporativo', '15:00'),
+    # Telemetría
+    ('telemetria', '08:00'),
+    ('telemetria', '09:00'),
+    ('telemetria', '10:00'),
+    ('telemetria', '11:00'),
+    ('telemetria', '12:00'),
+    ('telemetria', '13:00'),
+    ('telemetria', '14:00'),
+    ('telemetria', '15:00'),
+    ('telemetria', '16:00')
 ]
 
 # Borrar horarios existentes antes de insertar
@@ -163,7 +174,13 @@ equipment = [
     # Corporativo
     ('corporativo', 'Fleet de drones profesionales'),
     ('corporativo', 'Cámaras térmicas'),
-    ('corporativo', 'Drones para interiores')
+    ('corporativo', 'Drones para interiores'),
+    # Telemetría
+    ('telemetria', 'Drones con LiDAR'),
+    ('telemetria', 'Cámaras fotogramétricas de alta precisión'),
+    ('telemetria', 'Software de modelado 3D (Blender, Sketchup)'),
+    ('telemetria', 'Sistemas de posicionamiento RTK'),
+    ('telemetria', 'Software de procesamiento de nube de puntos')
 ]
 
 # Borrar equipamiento existente antes de insertar
@@ -194,7 +211,14 @@ features = [
     ('corporativo', 'Tours virtuales'),
     ('corporativo', 'Inspección de infraestructuras'),
     ('corporativo', 'Cobertura de eventos corporativos'),
-    ('corporativo', 'Material para marketing y publicidad')
+    ('corporativo', 'Material para marketing y publicidad'),
+    # Telemetría
+    ('telemetria', 'Escaneo 3D de edificaciones y espacios'),
+    ('telemetria', 'Modelado preciso para arquitectura e ingeniería'),
+    ('telemetria', 'Creación de archivos 3D para impresión'),
+    ('telemetria', 'Generación de planos y medidas exactas'),
+    ('telemetria', 'Reconstrucción virtual de espacios'),
+    ('telemetria', 'Exportación a formatos compatibles con Blender y Sketchup')
 ]
 
 # Borrar características existentes antes de insertar
@@ -219,7 +243,13 @@ requirements = [
     ('corporativo', 'Contrato formal'),
     ('corporativo', 'Permisos de acceso a instalaciones'),
     ('corporativo', 'Identificación de áreas restringidas'),
-    ('corporativo', 'Acuerdos de confidencialidad si es necesario')
+    ('corporativo', 'Acuerdos de confidencialidad si es necesario'),
+    # Telemetría
+    ('telemetria', 'Acceso completo a todas las áreas a modelar'),
+    ('telemetria', 'Espacio despejado alrededor de la estructura para vuelo seguro'),
+    ('telemetria', 'Iluminación adecuada para captura de detalles'),
+    ('telemetria', 'Especificaciones claras del formato 3D requerido'),
+    ('telemetria', 'Información sobre materiales y texturas deseadas')
 ]
 
 # Borrar requisitos existentes antes de insertar
@@ -229,7 +259,8 @@ cursor.executemany('INSERT INTO requirements (service_id, description) VALUES (?
 # Añadir algunas reservas de ejemplo
 bookings = [
     ('B001', 'montaña', '20/03/2025', '09:00', 4, 'Juan Pérez', 'juan.perez@ejemplo.com', '+34 612 345 678', 'Sierra de Guadarrama, Madrid', 'Filmación para documental sobre senderismo', 'confirmado', 480),
-    ('B002', 'playa', '25/03/2025', '17:00', 2, 'María Rodríguez', 'maria.r@ejemplo.com', '+34 623 456 789', 'Playa de la Concha, San Sebastián', 'Grabación para vídeo promocional de hotel', 'pendiente', 200)
+    ('B002', 'playa', '25/03/2025', '17:00', 2, 'María Rodríguez', 'maria.r@ejemplo.com', '+34 623 456 789', 'Playa de la Concha, San Sebastián', 'Grabación para vídeo promocional de hotel', 'pendiente', 200),
+    ('B003', 'telemetria', '15/04/2025', '10:00', 4, 'Carlos Martínez', 'carlos.m@ejemplo.com', '+34 634 567 890', 'Casa histórica en el centro de Barcelona', 'Modelado 3D para proyecto de restauración', 'pendiente', 800)
 ]
 
 cursor.executemany('''
