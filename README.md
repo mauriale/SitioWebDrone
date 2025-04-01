@@ -16,6 +16,16 @@ Este repositorio contiene un sistema completo de gestión de reservas para servi
 - **Base de datos SQLite** para almacenamiento de datos
 - **Exportación de datos** a archivos JSON
 
+## 🚁 Servicios Disponibles
+
+El sistema incluye los siguientes servicios de drones:
+
+1. **Filmación en Montaña** - Tomas espectaculares de paisajes montañosos y actividades al aire libre
+2. **Filmación en Playa** - Imágenes aéreas de costas, olas y eventos playeros
+3. **Producción Audiovisual** - Servicios completos de filmación, edición y posproducción
+4. **Servicios Corporativos** - Filmación para empresas, publicidad y eventos
+5. **Telemetría y Modelado 3D** - Transformación de edificaciones y espacios en archivos 3D para impresiones o remodelaciones con software como Blender o Sketchup
+
 ## 🔧 Instalación
 
 ### Requisitos previos
@@ -44,36 +54,14 @@ Este repositorio contiene un sistema completo de gestión de reservas para servi
    - Crea los directorios necesarios
    - Inicializa la base de datos (si no existe)
 
-### Instalación manual
+### Recreación de la base de datos (incluyendo el servicio de Telemetría)
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/mauriale/SitioWebDrone.git
-   cd SitioWebDrone
-   ```
+Si deseas reinicializar la base de datos con todos los servicios, incluyendo el nuevo servicio de Telemetría:
 
-2. Crea un entorno virtual (opcional pero recomendado):
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # En Linux/Mac
-   venv\\Scripts\\activate  # En Windows
-   ```
-
-3. Instala las dependencias:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. Crea los directorios necesarios:
-   ```bash
-   mkdir -p logs
-   mkdir -p database/backup
-   ```
-
-5. Inicializa la base de datos:
-   ```bash
-   python database/create_db.py
-   ```
+```bash
+chmod +x recreate_db.sh
+./recreate_db.sh
+```
 
 ## 🚀 Uso
 
@@ -117,12 +105,19 @@ SitioWebDrone/
 │   ├── create_db.py       # Script para crear la BD
 │   ├── db_manager.py      # Clase para gestionar la BD
 │   └── dronevista.db      # Base de datos SQLite
+├── info/                  # Páginas informativas sobre servicios
+│   └── telemetria-3d.html # Información sobre servicio de telemetría
 ├── js/                    # JavaScript del frontend
 ├── logs/                  # Archivos de log
+├── favicon.ico            # Favicon del sitio (icono de drone)
+├── favicon.svg            # Versión vectorial del favicon
+├── favicon.png            # Versión PNG del favicon
 ├── donaciones.html        # Página de donaciones
 ├── drone-website.html     # Plantilla alternativa
 ├── index.html             # Página principal
 ├── requirements.txt       # Dependencias de Python
+├── recreate_db.sh         # Script para recrear BD con todos los servicios
+├── install.sh             # Script de instalación
 ├── start_server.py        # Script de inicio
 └── tu-video-drone.mp4     # Video de fondo
 ```
@@ -158,56 +153,6 @@ La estructura de la base de datos incluye:
 - Características y requisitos de servicios
 - Tabla de reservas con toda la información del cliente
 
-### Proxy seguro para Google Maps API
-
-Se implementó un proxy seguro para proteger la clave API de Google Maps, evitando su exposición directa en el frontend. Este enfoque proporciona una capa adicional de seguridad al manejar todas las solicitudes a la API de Google Maps a través de un backend intermedio.
-
-## ⚙️ Configuración
-
-El archivo de configuración principal está en `config/db_config.json` y contiene:
-
-```json
-{
-  "database": {
-    "type": "sqlite",
-    "path": "database/dronevista.db",
-    "backup_path": "database/backup/",
-    "auto_backup": true,
-    "backup_frequency": "daily"
-  },
-  "api": {
-    "host": "localhost",
-    "port": 5000,
-    "base_url": "/api",
-    "debug": true,
-    "cors_enabled": true,
-    "allowed_origins": ["http://localhost", "https://dronevista.com"],
-    "timeout": 30,
-    "rate_limit": {
-      "enabled": true,
-      "requests_per_minute": 60
-    }
-  },
-  "logging": {
-    "level": "info",
-    "file": "logs/api.log",
-    "max_size": 10485760,
-    "backup_count": 5,
-    "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-  },
-  "email": {
-    "enabled": false,
-    "smtp_server": "smtp.example.com",
-    "smtp_port": 587,
-    "use_tls": true,
-    "username": "notifications@example.com",
-    "password": "your-email-password",
-    "from_email": "notifications@example.com",
-    "admin_email": "admin@example.com"
-  }
-}
-```
-
 ## 🔐 Seguridad
 
 - **Proxy para Google Maps API:** La clave API está protegida en el backend
@@ -215,52 +160,6 @@ El archivo de configuración principal está en `config/db_config.json` y contie
 - **Seguridad CORS:** Control de acceso mediante CORS configurado
 - **Logs detallados:** Sistema de logging para detectar problemas
 - **Backups automáticos:** Respaldo de datos en archivos JSON
-
-## 📊 Detalles técnicos
-
-### Backend (API)
-
-- Framework: Flask
-- Base de datos: SQLite
-- Middlewares: Flask-CORS
-
-### Frontend
-
-- HTML5, CSS3, JavaScript moderno
-- Diseño responsive adaptable a todos los dispositivos
-- Integración con Google Maps (a través de proxy)
-- Validación de formularios en cliente y servidor
-
-## 📝 Flujo de reservas
-
-1. **Selección de servicio:** El usuario elige el tipo de servicio de drones
-2. **Selección de fecha/hora:** Se muestran fechas y horarios disponibles
-3. **Duración y ubicación:** El usuario especifica estos detalles
-4. **Información personal:** Ingreso de datos de contacto
-5. **Confirmación:** Resumen de la reserva y precio total
-6. **Procesamiento:** El sistema registra la reserva y envía confirmación
-
-## 🌐 Integración con Google Maps
-
-El sistema incluye:
-- Geocodificación (conversión de direcciones a coordenadas)
-- Autocompletado de direcciones
-- Visualización de ubicaciones en el mapa
-- Cálculo de rutas y distancias
-
-Todo se gestiona a través del proxy seguro en `api/maps_proxy.py`.
-
-## 👨‍💻 Desarrollo
-
-Para contribuir al desarrollo:
-
-1. Crear una rama para nuevas características:
-   ```bash
-   git checkout -b nueva-caracteristica
-   ```
-
-2. Realizar cambios y probar localmente
-3. Enviar pull request con descripción detallada de los cambios
 
 ## 📄 Licencia
 
