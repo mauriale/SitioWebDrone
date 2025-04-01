@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telemetría y Modelado 3D - DroneVista</title>
+  <!-- Favicons para diferentes dispositivos -->
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../favicon.png">
+  <!-- Estilos -->
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .service-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 30px;
+    }
+    
+    .service-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .service-header h1 {
+      color: #FF6B00;
+      margin-bottom: 15px;
+    }
+    
+    .service-header p {
+      font-size: 1.2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    
+    .service-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+    
+    @media (min-width: 768px) {
+      .service-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+    
+    .service-section {
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      padding: 30px;
+    }
+    
+    .service-section h2 {
+      margin-bottom: 20px;
+      color: #FF6B00;
+    }
+    
+    .service-section p {
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+    
+    .service-section ul {
+      margin-left: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .service-section li {
+      margin-bottom: 10px;
+    }
+    
+    .workflow {
+      margin-top: 30px;
+    }
+    
+    .workflow-item {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .workflow-item h3 {
+      color: #FF6B00;
+      margin-bottom: 10px;
+    }
+    
+    .image-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+    
+    .image-placeholder {
+      background-color: rgba(255, 255, 255, 0.1);
+      height: 200px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #FF6B00;
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    .applications {
+      margin-top: 30px;
+    }
+    
+    .application-item {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .application-item h3 {
+      color: #FF6B00;
+      margin-bottom: 10px;
+    }
+    
+    .back-button {
+      display: inline-block;
+      background-color: #FF6B00;
+      color: white;
+      text-decoration: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-weight: bold;
+      transition: transform 0.3s, background-color 0.3s;
+      margin-top: 20px;
+    }
+    
+    .back-button:hover {
+      background-color: #FF8F3F;
+      transform: translateY(-3px);
+    }
+    
+    .cta-section {
+      text-align: center;
+      margin-top: 50px;
+      padding: 30px;
+      background-color: rgba(255, 107, 0, 0.2);
+      border-radius: 15px;
+    }
+    
+    .cta-button {
+      display: inline-block;
+      background-color: #FF6B00;
+      color: white;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-weight: bold;
+      font-size: 1.2rem;
+      transition: transform 0.3s, background-color 0.3s;
+      margin-top: 20px;
+    }
+    
+    .cta-button:hover {
+      background-color: #FF8F3F;
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+<body>
+  <div class="video-container">
+    <video autoplay muted loop playsinline class="video-background">
+      <source src="../tu-video-drone.mp4" type="video/mp4">
+      <!-- Imagen de respaldo en caso de que el video no cargue -->
+      <img src="/api/placeholder/480/800" alt="Vista aérea desde un drone" class="video-background">
+    </video>
+  </div>
+
+  <div class="content">
+    <header>
+      <div class="logo">DroneVista</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="../index.html#servicios">Servicios</a></li>
+        <li><a href="../index.html#reservas">Reservas</a></li>
+        <li><a href="../index.html#donaciones">Apóyanos</a></li>
+        <li><a href="../index.html#contacto">Contacto</a></li>
+      </ul>
+      <button class="menu-btn" id="menuBtn">☰</button>
+    </header>
+
+    <div class="service-page">
+      <div class="service-header">
+        <h1>Telemetría y Modelado 3D</h1>
+        <p>Transformamos espacios físicos en modelos 3D precisos para arquitectura, diseño e impresión 3D</p>
+      </div>
+
+      <div class="service-grid">
+        <div class="service-section">
+          <h2>Nuestro Servicio de Telemetría</h2>
+          <p>Utilizando drones equipados con tecnología LiDAR y cámaras fotogramétricas de alta precisión, capturamos cada detalle de edificios, casas y espacios para crear modelos 3D exactos y detallados.</p>
+          
+          <p>Nuestros servicios de telemetría y modelado 3D le permiten:</p>
+          
+          <ul>
+            <li><strong>Digitalizar espacios existentes</strong> con precisión milimétrica para análisis y planificación.</li>
+            <li><strong>Obtener modelos 3D listos para Blender o Sketchup</strong> que facilitan la visualización y modificación virtual.</li>
+            <li><strong>Crear archivos preparados para impresión 3D</strong> de maquetas y prototipos a escala.</li>
+            <li><strong>Documentar estructuras históricas</strong> preservando digitalmente su estado actual.</li>
+            <li><strong>Detectar problemas estructurales</strong> que podrían ser invisibles a simple vista.</li>
+          </ul>
+          
+          <div class="workflow">
+            <h2>Nuestro Proceso</h2>
+            
+            <div class="workflow-item">
+              <h3>1. Captura de Datos</h3>
+              <p>Nuestros drones equipados con LiDAR y cámaras de alta resolución realizan múltiples vuelos para capturar todos los ángulos y detalles de la estructura o espacio.</p>
+            </div>
+            
+            <div class="workflow-item">
+              <h3>2. Procesamiento de Nubes de Puntos</h3>
+              <p>Procesamos los datos capturados para crear una nube de puntos 3D precisa que contiene millones de mediciones exactas del espacio.</p>
+            </div>
+            
+            <div class="workflow-item">
+              <h3>3. Modelado y Optimización</h3>
+              <p>Convertimos la nube de puntos en un modelo 3D detallado y optimizado, añadiendo texturas y materiales para un resultado visualmente realista.</p>
+            </div>
+            
+            <div class="workflow-item">
+              <h3>4. Exportación a Formatos Compatibles</h3>
+              <p>Exportamos el modelo final en formatos compatibles con Blender, Sketchup y otros software de diseño 3D, listos para su uso inmediato.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-section">
+          <h2>Aplicaciones Prácticas</h2>
+          
+          <div class="application-item">
+            <h3>Arquitectura y Renovación</h3>
+            <p>Obtenga modelos precisos de edificios existentes para planificar renovaciones, ampliaciones o restauraciones con exactitud.</p>
+          </div>
+          
+          <div class="application-item">
+            <h3>Diseño de Interiores</h3>
+            <p>Visualice cambios y remodelaciones en espacios internos antes de realizar cualquier modificación física.</p>
+          </div>
+          
+          <div class="application-item">
+            <h3>Preservación Patrimonial</h3>
+            <p>Documente digitalmente edificios históricos para su preservación y estudio, creando un archivo digital permanente.</p>
+          </div>
+          
+          <div class="application-item">
+            <h3>Impresión 3D</h3>
+            <p>Cree maquetas físicas precisas a escala de edificios y espacios para presentaciones, exposiciones o prototipos.</p>
+          </div>
+          
+          <div class="application-item">
+            <h3>Realidad Virtual</h3>
+            <p>Utilice los modelos 3D para crear experiencias inmersivas que permitan a los usuarios recorrer virtualmente los espacios.</p>
+          </div>
+          
+          <div class="image-grid">
+            <div class="image-placeholder">Modelo 3D Casa</div>
+            <div class="image-placeholder">Nube de Puntos</div>
+            <div class="image-placeholder">Blender Render</div>
+            <div class="image-placeholder">Impresión 3D</div>
+          </div>
+          
+          <h2>Equipo Especializado</h2>
+          <p>Utilizamos tecnología de punta para garantizar resultados profesionales:</p>
+          
+          <ul>
+            <li><strong>Drones con LiDAR</strong> para mediciones precisas en cualquier condición de luz</li>
+            <li><strong>Cámaras fotogramétricas de alta resolución</strong> para capturar texturas y detalles</li>
+            <li><strong>Sistemas GPS RTK</strong> para posicionamiento centimétrico</li>
+            <li><strong>Software profesional</strong> para procesamiento y modelado</li>
+            <li><strong>Estaciones de trabajo de alto rendimiento</strong> para manejo de datos complejos</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="cta-section">
+        <h2>¿Listo para transformar su espacio en un modelo 3D?</h2>
+        <p>Nuestro equipo está preparado para escanear y modelar cualquier estructura, desde casas familiares hasta edificios patrimoniales.</p>
+        <a href="../index.html#reservas" class="cta-button">Reservar Servicio de Telemetría</a>
+      </div>
+      
+      <div style="text-align: center; margin-top: 40px;">
+        <a href="../index.html" class="back-button">Volver a la página principal</a>
+      </div>
+    </div>
+
+    <footer id="contacto">
+      <p>© 2025 DroneVista. Todos los derechos reservados.</p>
+      <p>Email: info@dronevista.com | Teléfono: +1 234 567 890</p>
+      <div class="social-links">
+        <a href="#" class="social-link">📱</a>
+        <a href="#" class="social-link">📷</a>
+        <a href="#" class="social-link">📹</a>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Manejar el botón de menú
+      const menuBtn = document.getElementById('menuBtn');
+      const navLinks = document.getElementById('navLinks');
+      
+      menuBtn.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
