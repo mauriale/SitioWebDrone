@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telemetría y Modelado 3D con Drones - DroneVista</title>
+  <!-- Favicons -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .service-detail-hero {
+      height: 50vh;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1508614589041-895b88991e3e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1500&q=80');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      margin-bottom: 2rem;
+    }
+
+    .service-detail-hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+
+    .feature-card {
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-card h3 {
+      color: #FF6B00;
+      margin-bottom: 1rem;
+    }
+
+    .workflow-steps {
+      counter-reset: step;
+      margin: 2rem 0;
+    }
+
+    .workflow-step {
+      counter-increment: step;
+      display: flex;
+      margin-bottom: 1.5rem;
+      padding-left: 3rem;
+      position: relative;
+    }
+
+    .workflow-step:before {
+      content: counter(step);
+      background: #FF6B00;
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-weight: bold;
+    }
+
+    .showcase-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .showcase-item {
+      border-radius: 8px;
+      overflow: hidden;
+      height: 200px;
+    }
+
+    .showcase-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .showcase-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .cta-section {
+      background: linear-gradient(to right, #FF6B00, #FF9E55);
+      color: white;
+      padding: 3rem;
+      border-radius: 8px;
+      text-align: center;
+      margin: 3rem 0;
+    }
+
+    .cta-section h2 {
+      margin-bottom: 1rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .cta-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">DroneVista</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html#servicios">Servicios</a></li>
+      <li><a href="index.html#reservas">Reservas</a></li>
+      <li><a href="index.html#donaciones">Apóyanos</a></li>
+      <li><a href="index.html#contacto">Contacto</a></li>
+    </ul>
+    <button class="menu-btn" id="menuBtn">☰</button>
+  </header>
+
+  <div class="service-detail-hero">
+    <div>
+      <h1>Telemetría y Modelado 3D con Drones</h1>
+      <p>Transforma espacios reales en modelos digitales precisos</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <section>
+      <h2>Obtén modelos 3D de alta precisión para tus proyectos</h2>
+      <p>Nuestro servicio de Telemetría y Modelado 3D utiliza tecnología de punta para capturar datos precisos del mundo real y transformarlos en modelos digitales detallados que puedes utilizar en cualquier software de modelado 3D como Blender, AutoCAD, Maya, o 3ds Max.</p>
+      
+      <p>Ya sea que necesites un modelo 3D de un edificio, un terreno, o cualquier estructura física, nuestros drones equipados con sensores avanzados pueden capturar todos los datos necesarios para crear una representación digital exacta.</p>
+    </section>
+
+    <section>
+      <h2>Características principales</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <h3>Fotogrametría de alta precisión</h3>
+          <p>Utilizamos técnicas avanzadas de fotogrametría para generar modelos 3D precisos a partir de cientos de fotografías aéreas capturadas desde múltiples ángulos.</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>Escaneo con LiDAR</h3>
+          <p>Para proyectos que requieren la máxima precisión, empleamos drones equipados con sensores LiDAR que pueden generar nubes de puntos extremadamente detalladas.</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>Ortomosaicos georreferenciados</h3>
+          <p>Creamos mapas aéreos de alta resolución con coordenadas precisas que pueden integrarse en sistemas GIS y otras plataformas de análisis espacial.</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>Modelos 3D para Blender</h3>
+          <p>Entregamos modelos en formatos compatibles con Blender y otros software de modelado 3D, permitiéndote integrarlos directamente en tus proyectos creativos o técnicos.</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>Mediciones precisas</h3>
+          <p>Nuestros modelos permiten realizar mediciones exactas de distancias, áreas y volúmenes, ideales para planificación y análisis de proyectos.</p>
+        </div>
+        
+        <div class="feature-card">
+          <h3>Texturas de alta resolución</h3>
+          <p>Capturamos y aplicamos texturas fotorrealistas a los modelos 3D, creando representaciones visualmente precisas del mundo real.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Nuestro proceso de trabajo</h2>
+      <div class="workflow-steps">
+        <div class="workflow-step">
+          <div>
+            <h3>Consulta inicial y planificación</h3>
+            <p>Evaluamos tus necesidades específicas, definimos el nivel de detalle requerido y planificamos la misión del drone considerando las condiciones del terreno y el clima.</p>
+          </div>
+        </div>
+        
+        <div class="workflow-step">
+          <div>
+            <h3>Captura de datos aéreos</h3>
+            <p>Realizamos vuelos sistemáticos sobre el área de interés, capturando cientos de imágenes superpuestas y/o datos LiDAR según los requisitos del proyecto.</p>
+          </div>
+        </div>
+        
+        <div class="workflow-step">
+          <div>
+            <h3>Procesamiento de datos</h3>
+            <p>Utilizamos software especializado para procesar las imágenes y datos recopilados, generando nubes de puntos, mallas 3D y texturas de alta resolución.</p>
+          </div>
+        </div>
+        
+        <div class="workflow-step">
+          <div>
+            <h3>Refinamiento y optimización</h3>
+            <p>Limpiamos y refinamos los modelos 3D, asegurándonos de que sean precisos y estén optimizados para el uso previsto, ya sea técnico o creativo.</p>
+          </div>
+        </div>
+        
+        <div class="workflow-step">
+          <div>
+            <h3>Entrega y soporte</h3>
+            <p>Entregamos los modelos en los formatos solicitados (OBJ, FBX, glTF, PLY, etc.) y proporcionamos soporte para su integración en tus proyectos y software.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Aplicaciones prácticas</h2>
+      <ul>
+        <li><strong>Arquitectura y construcción:</strong> Modelos 3D de edificios existentes para renovaciones o ampliaciones.</li>
+        <li><strong>Visualizaciones arquitectónicas:</strong> Integra edificios reales en renderings y presentaciones de proyectos.</li>
+        <li><strong>Patrimonio cultural:</strong> Preservación digital de estructuras históricas y monumentos.</li>
+        <li><strong>Urbanismo:</strong> Planificación urbana basada en modelos precisos del entorno construido.</li>
+        <li><strong>Topografía:</strong> Análisis de terrenos para proyectos de ingeniería civil.</li>
+        <li><strong>Realidad virtual:</strong> Creación de entornos VR basados en lugares reales.</li>
+        <li><strong>Cine y efectos visuales:</strong> Escenarios realistas para producciones audiovisuales.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Galería de proyectos</h2>
+      <div class="showcase-gallery">
+        <div class="showcase-item">
+          <img src="https://images.unsplash.com/photo-1618346136472-090de27fe8b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Modelo 3D de edificio histórico">
+        </div>
+        <div class="showcase-item">
+          <img src="https://images.unsplash.com/photo-1576669802237-a1efbf4a6253?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Modelado topográfico de terreno">
+        </div>
+        <div class="showcase-item">
+          <img src="https://images.unsplash.com/photo-1590859808308-3d2d9c515b1a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Nube de puntos de estructura compleja">
+        </div>
+        <div class="showcase-item">
+          <img src="https://images.unsplash.com/photo-1523979858452-5cdb1a4ba15c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Ortomosaico urbano">
+        </div>
+      </div>
+    </section>
+
+    <div class="cta-section">
+      <h2>¿Listo para transformar espacios reales en modelos digitales?</h2>
+      <p>Nuestro equipo está preparado para ayudarte a capturar y modelar cualquier estructura o terreno con precisión milimétrica.</p>
+      <div class="cta-buttons">
+        <a href="index.html#reservas" class="cta-button">Reservar servicio</a>
+        <a href="index.html#contacto" class="cta-button secondary">Contactar para más información</a>
+      </div>
+    </div>
+
+    <section>
+      <h2>Preguntas frecuentes</h2>
+      <div class="faq-container">
+        <div class="faq-item">
+          <h3>¿Qué tamaño de área pueden modelar?</h3>
+          <p>Podemos trabajar con áreas desde unos pocos metros cuadrados hasta varios kilómetros cuadrados. El tamaño afecta al tiempo requerido y al nivel de detalle posible.</p>
+        </div>
+        
+        <div class="faq-item">
+          <h3>¿Qué formatos de archivo proporcionan?</h3>
+          <p>Ofrecemos modelos en formatos estándar como OBJ, FBX, glTF, PLY y STL. También podemos proporcionar nubes de puntos en formatos LAS/LAZ o XYZ, según tus necesidades.</p>
+        </div>
+        
+        <div class="faq-item">
+          <h3>¿Qué precisión tienen los modelos 3D?</h3>
+          <p>Dependiendo del método utilizado, podemos alcanzar precisiones de 1-3 cm con fotogrametría estándar, y hasta milímetros utilizando LiDAR para estructuras cercanas.</p>
+        </div>
+        
+        <div class="faq-item">
+          <h3>¿Necesito preparar el área antes de la captura?</h3>
+          <p>Es recomendable eliminar elementos temporales no deseados y garantizar el acceso adecuado. También es útil marcar puntos de control si se requiere georreferenciación precisa.</p>
+        </div>
+        
+        <div class="faq-item">
+          <h3>¿Cuánto tiempo toma todo el proceso?</h3>
+          <p>El tiempo varía según el tamaño del área y la complejidad. La captura puede tomar unas horas, mientras que el procesamiento puede llevar de 1 a 3 días para proyectos estándar.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2025 DroneVista. Todos los derechos reservados.</p>
+    <p>Email: info@dronevista.com | Teléfono: +1 234 567 890</p>
+    <div class="social-links">
+      <a href="#" class="social-link">📱</a>
+      <a href="#" class="social-link">📷</a>
+      <a href="#" class="social-link">📹</a>
+    </div>
+  </footer>
+
+  <script>
+    // Menú móvil
+    document.addEventListener('DOMContentLoaded', function() {
+      const menuBtn = document.getElementById('menuBtn');
+      const navLinks = document.getElementById('navLinks');
+      
+      menuBtn.addEventListener('click', function() {
+        navLinks.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
