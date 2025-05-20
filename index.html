@@ -3,22 +3,41 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Servicios profesionales de filmación con drones: capturas aéreas, telemetría 3D y producción audiovisual de alta calidad.">
+  <meta name="keywords" content="drones, filmación aérea, telemetría 3D, modelado 3D, servicios de drone">
+  
+  <!-- Open Graph para compartir en redes sociales -->
+  <meta property="og:title" content="DroneVista - Servicios Profesionales de Drones">
+  <meta property="og:description" content="Especialistas en filmación aérea con drones y modelado 3D para arquitectura y diseño.">
+  <meta property="og:image" content="https://github.com/mauriale/SitioWebDrone/raw/main/img/social-preview.jpg">
+  <meta property="og:url" content="https://mauriale.github.io/SitioWebDrone/">
+  <meta property="og:type" content="website">
+  
   <title>Servicios de Piloto de Drone</title>
+  
+  <!-- Manifest para PWA -->
+  <link rel="manifest" href="manifest.json">
+  
   <!-- Favicons para diferentes dispositivos -->
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="favicon.png">
+  
   <!-- Estilos -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <link rel="stylesheet" href="css/styles.css">
+  
   <!-- Incluir el SDK de PayPal -->
-  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=EUR" defer></script>
+
+  <!-- Precargar los recursos críticos -->
+  <link rel="preload" href="js/booking.js" as="script">
 </head>
 <body>
   <div class="video-container">
-    <video autoplay muted loop playsinline class="video-background">
+    <video autoplay muted loop playsinline class="video-background" poster="img/drone-poster.jpg">
       <source src="tu-video-drone.mp4" type="video/mp4">
-      <img src="/api/placeholder/480/800" alt="Vista aérea desde un drone" class="video-background">
+      <img src="img/drone-poster.jpg" alt="Vista aérea desde un drone" class="video-background">
     </video>
   </div>
 
@@ -31,7 +50,7 @@
         <li><a href="#donaciones">Apóyanos</a></li>
         <li><a href="#contacto">Contacto</a></li>
       </ul>
-      <button class="menu-btn" id="menuBtn">☰</button>
+      <button class="menu-btn" id="menuBtn" aria-label="Menú de navegación">☰</button>
     </header>
 
     <section class="hero">
@@ -41,6 +60,7 @@
     </section>
 
     <section class="services" id="servicios">
+      <h2 class="section-title">Nuestros Servicios</h2>
       <!-- Los servicios se cargarán dinámicamente desde la API -->
       <div id="servicesSpinner" class="spinner" style="display: block;"></div>
     </section>
@@ -187,13 +207,132 @@
       </div>
     </section>
 
+    <!-- Nueva sección de galería de trabajos -->
+    <section class="portfolio-section" id="portfolio">
+      <h2>Nuestros Mejores Trabajos</h2>
+      
+      <div class="portfolio-filters">
+        <button class="filter-btn active" data-filter="all">Todos</button>
+        <button class="filter-btn" data-filter="montaña">Montaña</button>
+        <button class="filter-btn" data-filter="playa">Playa</button>
+        <button class="filter-btn" data-filter="corporativo">Corporativo</button>
+        <button class="filter-btn" data-filter="telemetria">Telemetría 3D</button>
+      </div>
+      
+      <div class="portfolio-grid">
+        <!-- Ejemplos de trabajos, se cargarían dinámicamente desde la API -->
+        <div class="portfolio-item" data-category="playa">
+          <img src="img/portfolio/playa-1.jpg" alt="Filmación aérea de playa" loading="lazy">
+          <div class="portfolio-overlay">
+            <h3>Costa del Sol</h3>
+            <p>Filmación aérea para promoción turística</p>
+          </div>
+        </div>
+        
+        <div class="portfolio-item" data-category="montaña">
+          <img src="img/portfolio/montana-1.jpg" alt="Filmación en montaña" loading="lazy">
+          <div class="portfolio-overlay">
+            <h3>Sierra Nevada</h3>
+            <p>Documental sobre rutas de senderismo</p>
+          </div>
+        </div>
+        
+        <div class="portfolio-item" data-category="corporativo">
+          <img src="img/portfolio/corporativo-1.jpg" alt="Evento corporativo" loading="lazy">
+          <div class="portfolio-overlay">
+            <h3>Inauguración Tech Hub</h3>
+            <p>Cobertura de evento empresarial</p>
+          </div>
+        </div>
+        
+        <div class="portfolio-item" data-category="telemetria">
+          <img src="img/portfolio/telemetria-1.jpg" alt="Modelo 3D de edificio" loading="lazy">
+          <div class="portfolio-overlay">
+            <h3>Modelado Arquitectónico</h3>
+            <p>Digitalización de edificio histórico</p>
+          </div>
+        </div>
+        
+        <!-- Se añadirían más elementos de portfolio -->
+      </div>
+      
+      <!-- Paginación -->
+      <div class="portfolio-pagination">
+        <button class="pagination-btn active">1</button>
+        <button class="pagination-btn">2</button>
+        <button class="pagination-btn">3</button>
+      </div>
+    </section>
+
+    <!-- Nueva sección de testimonios -->
+    <section class="testimonials-section" id="testimonios">
+      <h2>Lo que dicen nuestros clientes</h2>
+      
+      <div class="testimonial-slider">
+        <div class="testimonial-card">
+          <div class="testimonial-rating">★★★★★</div>
+          <p class="testimonial-text">"El servicio de filmación en playa superó mis expectativas. Las imágenes aéreas capturaron momentos increíbles de nuestra boda en la playa."</p>
+          <div class="testimonial-author">María G.</div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-rating">★★★★★</div>
+          <p class="testimonial-text">"Contratamos el servicio de modelado 3D para nuestra renovación arquitectónica y quedamos encantados con la precisión del trabajo. ¡Totalmente recomendable!"</p>
+          <div class="testimonial-author">Carlos R. - Arquitecto</div>
+        </div>
+        
+        <div class="testimonial-card">
+          <div class="testimonial-rating">★★★★☆</div>
+          <p class="testimonial-text">"Excelente trabajo para nuestro evento corporativo. Las tomas aéreas dieron una dimensión completamente nueva a nuestro video promocional."</p>
+          <div class="testimonial-author">Tech Solutions S.L.</div>
+        </div>
+      </div>
+      
+      <div class="testimonial-dots">
+        <span class="dot active"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </section>
+
     <footer id="contacto">
-      <p>© 2025 DroneVista. Todos los derechos reservados.</p>
-      <p>Email: info@dronevista.com | Teléfono: +1 234 567 890</p>
-      <div class="social-links">
-        <a href="#" class="social-link">📱</a>
-        <a href="#" class="social-link">📷</a>
-        <a href="#" class="social-link">📹</a>
+      <div class="footer-content">
+        <div class="footer-logo">
+          <div class="logo">DroneVista</div>
+          <p>Capturando perspectivas únicas desde el cielo</p>
+        </div>
+        
+        <div class="footer-links">
+          <h3>Enlaces rápidos</h3>
+          <ul>
+            <li><a href="#servicios">Servicios</a></li>
+            <li><a href="#reservas">Reservas</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#testimonios">Testimonios</a></li>
+            <li><a href="#donaciones">Donaciones</a></li>
+          </ul>
+        </div>
+        
+        <div class="footer-contact">
+          <h3>Contacto</h3>
+          <p>Email: info@dronevista.com</p>
+          <p>Teléfono: +1 234 567 890</p>
+          <p>Horario: Lunes a Viernes, 9:00 - 18:00</p>
+        </div>
+        
+        <div class="footer-social">
+          <h3>Síguenos</h3>
+          <div class="social-links">
+            <a href="#" class="social-link" aria-label="Instagram">📱</a>
+            <a href="#" class="social-link" aria-label="Twitter">📷</a>
+            <a href="#" class="social-link" aria-label="YouTube">📹</a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="footer-bottom">
+        <p>© 2025 DroneVista. Todos los derechos reservados.</p>
+        <p><a href="politica-privacidad.html">Política de Privacidad</a> | <a href="terminos-servicio.html">Términos de Servicio</a></p>
       </div>
     </footer>
   </div>
@@ -243,6 +382,8 @@
       // Función para renderizar el botón de PayPal
       function renderPayPalButton() {
         const paypalContainer = document.getElementById('paypal-button-container');
+        if (!paypalContainer) return;
+        
         paypalContainer.innerHTML = ''; // Limpiar contenedor
         
         paypal.Buttons({
@@ -274,8 +415,49 @@
         }).render('#paypal-button-container');
       }
       
+      // Control de testimonios
+      const testimonialDots = document.querySelectorAll('.testimonial-dots .dot');
+      if (testimonialDots.length > 0) {
+        testimonialDots.forEach((dot, index) => {
+          dot.addEventListener('click', () => {
+            document.querySelector('.testimonial-dots .dot.active').classList.remove('active');
+            dot.classList.add('active');
+            
+            const testimonialSlider = document.querySelector('.testimonial-slider');
+            if (testimonialSlider) {
+              testimonialSlider.style.transform = `translateX(-${index * 100}%)`;
+            }
+          });
+        });
+      }
+      
+      // Filtros de portfolio
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      if (filterButtons.length > 0) {
+        filterButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            // Quitar clase active de todos los botones
+            document.querySelector('.filter-btn.active').classList.remove('active');
+            button.classList.add('active');
+            
+            const filter = button.dataset.filter;
+            const portfolioItems = document.querySelectorAll('.portfolio-item');
+            
+            portfolioItems.forEach(item => {
+              if (filter === 'all' || item.dataset.category === filter) {
+                item.style.display = 'block';
+              } else {
+                item.style.display = 'none';
+              }
+            });
+          });
+        });
+      }
+      
       // Renderizar el botón de PayPal inicialmente
-      renderPayPalButton();
+      if (typeof paypal !== 'undefined' && document.getElementById('paypal-button-container')) {
+        renderPayPalButton();
+      }
     });
   </script>
 </body>
