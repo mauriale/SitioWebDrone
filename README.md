@@ -15,6 +15,8 @@ Este repositorio contiene un sistema completo de gestión de reservas para servi
 - **Panel de administración** para gestionar reservas
 - **Base de datos SQLite** para almacenamiento de datos
 - **Exportación de datos** a archivos JSON
+- **Service Worker** para funcionalidad offline
+- **Diseño PWA** para instalación como aplicación
 
 ## 🚁 Servicios Disponibles
 
@@ -33,7 +35,27 @@ El sistema incluye los siguientes servicios de drones:
 - Python 3.7 o superior
 - pip (administrador de paquetes de Python)
 
-### Instalación automatizada
+### Instalación en Windows
+
+1. Clona el repositorio:
+   ```bash
+   git clone https://github.com/mauriale/SitioWebDrone.git
+   cd SitioWebDrone
+   ```
+
+2. Ejecuta el script de instalación haciendo doble clic en `install.bat` o desde la línea de comandos:
+   ```cmd
+   install.bat
+   ```
+   
+   Este script:
+   - Verifica la instalación de Python y pip
+   - Ofrece crear un entorno virtual (recomendado)
+   - Instala todas las dependencias desde requirements.txt
+   - Crea los directorios necesarios
+   - Inicializa la base de datos (si no existe)
+
+### Instalación en Linux/Mac
 
 1. Clona el repositorio:
    ```bash
@@ -46,18 +68,17 @@ El sistema incluye los siguientes servicios de drones:
    chmod +x install.sh
    ./install.sh
    ```
-   
-   Este script:
-   - Verifica la instalación de Python y pip
-   - Ofrece crear un entorno virtual (recomendado)
-   - Instala todas las dependencias desde requirements.txt
-   - Crea los directorios necesarios
-   - Inicializa la base de datos (si no existe)
 
 ### Recreación de la base de datos (incluyendo el servicio de Telemetría)
 
 Si deseas reinicializar la base de datos con todos los servicios, incluyendo el nuevo servicio de Telemetría:
 
+En Windows:
+```cmd
+recreate_db.bat
+```
+
+En Linux/Mac:
 ```bash
 chmod +x recreate_db.sh
 ./recreate_db.sh
@@ -69,8 +90,14 @@ chmod +x recreate_db.sh
 
 Para iniciar el servidor web y la API:
 
+En Windows:
+```cmd
+run.bat
+```
+
+En Linux/Mac:
 ```bash
-python start_server.py
+./run.sh
 ```
 
 Por defecto, el servidor se inicia en:
@@ -79,14 +106,75 @@ Por defecto, el servidor se inicia en:
 
 ### Opciones de inicio
 
-El script `start_server.py` acepta los siguientes parámetros:
+El script de inicio acepta los siguientes parámetros:
 
 - `-c, --config`: Ruta al archivo de configuración (por defecto: config/db_config.json)
 - `-d, --debug`: Activa el modo debug
 
-Ejemplo:
+Ejemplo en Windows:
+```cmd
+run.bat --debug
+```
+
+Ejemplo en Linux/Mac:
 ```bash
-python start_server.py --debug
+./run.sh --debug
+```
+
+## 🔄 Gestión de versiones y respaldos
+
+El proyecto incluye un sistema de puntos de respaldo para facilitar el desarrollo y las pruebas:
+
+### Crear un punto de respaldo
+
+En Windows:
+```cmd
+backup.bat create NombreVersion "Descripción de cambios"
+```
+
+En Linux/Mac:
+```bash
+./backup.sh create NombreVersion "Descripción de cambios"
+```
+
+### Listar puntos de respaldo disponibles
+
+En Windows:
+```cmd
+backup.bat list
+```
+
+En Linux/Mac:
+```bash
+./backup.sh list
+```
+
+### Restaurar un punto de respaldo
+
+En Windows:
+```cmd
+backup.bat restore NombreVersion
+```
+
+En Linux/Mac:
+```bash
+./backup.sh restore NombreVersion
+```
+
+### Punto de respaldo actual
+
+Actualmente el proyecto dispone del punto de respaldo `Mejora-v1.3` que incluye:
+- Service Worker para funcionalidad offline
+- Soporte PWA con manifest.json
+- Optimización de rendimiento con lazy loading
+- Sistema de diseño con variables CSS
+- Mejoras en el formulario con validación en tiempo real
+- Mejora de estructura y navegación
+- Optimizaciones SEO (sitemap.xml, robots.txt)
+
+Para restaurar este punto:
+```cmd
+backup.bat restore Mejora-v1.3
 ```
 
 ## 🗂️ Estructura del proyecto
@@ -109,16 +197,26 @@ SitioWebDrone/
 │   └── telemetria-3d.html # Información sobre servicio de telemetría
 ├── js/                    # JavaScript del frontend
 ├── logs/                  # Archivos de log
+├── backups/               # Puntos de respaldo del proyecto
+├── manifest.json          # Configuración para PWA
+├── service-worker.js      # Service Worker para funcionalidad offline
+├── sitemap.xml            # Sitemap para SEO
+├── robots.txt             # Configuración para rastreadores web
 ├── favicon.ico            # Favicon del sitio (icono de drone)
 ├── favicon.svg            # Versión vectorial del favicon
 ├── favicon.png            # Versión PNG del favicon
 ├── donaciones.html        # Página de donaciones
-├── drone-website.html     # Plantilla alternativa
+├── offline.html           # Página para mostrar cuando no hay conexión
 ├── index.html             # Página principal
 ├── requirements.txt       # Dependencias de Python
-├── recreate_db.sh         # Script para recrear BD con todos los servicios
-├── install.sh             # Script de instalación
-├── start_server.py        # Script de inicio
+├── recreate_db.bat        # Script para recrear BD (Windows)
+├── recreate_db.sh         # Script para recrear BD (Linux/Mac)
+├── install.bat            # Script de instalación para Windows
+├── install.sh             # Script de instalación para Linux/Mac
+├── run.bat                # Script de inicio para Windows
+├── run.sh                 # Script de inicio para Linux/Mac
+├── backup.bat             # Script de respaldo para Windows
+├── backup.sh              # Script de respaldo para Linux/Mac
 └── tu-video-drone.mp4     # Video de fondo
 ```
 
@@ -144,14 +242,14 @@ La API proporciona endpoints para:
 - Crear nuevas reservas
 - Gestionar estado de reservas existentes
 
-### Base de datos
+### Funcionalidad Offline
 
-La estructura de la base de datos incluye:
-- Tabla de servicios (tipos de servicio de drones)
-- Horarios disponibles por servicio
-- Equipamiento asociado a cada servicio
-- Características y requisitos de servicios
-- Tabla de reservas con toda la información del cliente
+Gracias al Service Worker, el sitio puede:
+- Funcionar sin conexión a internet
+- Almacenar reservas realizadas sin conexión
+- Sincronizar datos cuando la conexión se restablece
+- Mostrar una página offline cuando no hay conexión
+- Proporcionar una experiencia de usuario mejorada
 
 ## 🔐 Seguridad
 
@@ -165,44 +263,43 @@ La estructura de la base de datos incluye:
 
 Se están implementando las siguientes mejoras en el sitio web:
 
-### Fase 1: Optimización y Rendimiento
+### Fase 1: Optimización y Rendimiento ✅
 - ✅ Optimización de imágenes y video
 - ✅ Implementación de carga perezosa (lazy loading)
 - ✅ Minificación de CSS y JavaScript
 - ✅ Implementación de service worker para funcionalidad offline
 - ✅ Configuración de HTTPS
 
-### Fase 2: Diseño y Experiencia de Usuario
+### Fase 2: Diseño y Experiencia de Usuario ✅
 - ✅ Sistema de diseño con variables CSS
 - ✅ Mejora del formulario con validación en tiempo real
 - ✅ Navegación mejorada con indicadores de sección activa
 - ✅ Botón "volver arriba" para mejor navegación
 - ✅ Optimizaciones específicas para dispositivos móviles
 
-### Fase 3: Características Adicionales
+### Fase 3: Características Adicionales ⏳
 - ⏳ Galería de proyectos anteriores
 - ⏳ Sistema de reseñas de clientes
 - ⏳ Blog con consejos y novedades
 - ⏳ Soporte para múltiples idiomas (español/inglés)
 
-### Fase 4: Características Avanzadas
+### Fase 4: Características Avanzadas ⏳
 - ⏳ Visualización 3D de modelos para telemetría
 - ⏳ Chat en vivo para atención al cliente
 - ⏳ Sistema de pagos mejorado (múltiples opciones)
 - ⏳ Implementación PWA (Progressive Web App)
 
-## 🔄 Puntos de Respaldo
+## 💻 Compatibilidad
 
-Para facilitar la continuación del desarrollo en caso de interrupciones, se han establecido los siguientes puntos de respaldo:
+El proyecto ha sido diseñado para funcionar en:
+- 🪟 Windows 10/11
+- 🐧 Linux (todas las distribuciones principales)
+- 🍎 macOS (10.15+)
 
-1. **Base-v1.0**: Versión original antes de las mejoras
-2. **Mejora-v1.1**: Optimización de imágenes y rendimiento básico
-3. **Mejora-v1.2**: Implementación de service worker y funcionalidad offline
-4. **Mejora-v1.3**: Sistema de diseño y variables CSS
-5. **Mejora-v1.4**: Mejoras de formulario y validación
-6. **Mejora-v1.5**: Optimizaciones para móviles y navegación mejorada
-7. **Mejora-v1.6**: Implementación de galería y portfolio
-8. **Mejora-v1.7**: Implementación de testimonios y reseñas
+Y para ser visualizado correctamente en:
+- 🖥️ Navegadores de escritorio (Chrome, Firefox, Edge, Safari)
+- 📱 Navegadores móviles (iOS Safari, Android Chrome)
+- 📱 Como aplicación instalada (PWA)
 
 ## 📄 Licencia
 
