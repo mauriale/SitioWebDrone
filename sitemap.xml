@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+                            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+  <!-- Página principal -->
+  <url>
+    <loc>https://mauriale.github.io/SitioWebDrone/</loc>
+    <lastmod>2025-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://mauriale.github.io/SitioWebDrone/img/social-preview.jpg</image:loc>
+      <image:caption>DroneVista - Servicios profesionales de drones</image:caption>
+    </image:image>
+    <video:video>
+      <video:content_loc>https://mauriale.github.io/SitioWebDrone/tu-video-drone.mp4</video:content_loc>
+      <video:thumbnail_loc>https://mauriale.github.io/SitioWebDrone/img/drone-poster.jpg</video:thumbnail_loc>
+      <video:title>DroneVista - Capturando perspectivas únicas desde el cielo</video:title>
+      <video:description>Video de fondo mostrando tomas aéreas de drones</video:description>
+    </video:video>
+  </url>
+  
+  <!-- Página de donaciones -->
+  <url>
+    <loc>https://mauriale.github.io/SitioWebDrone/donaciones.html</loc>
+    <lastmod>2025-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Página de servicio específico - Telemetría 3D -->
+  <url>
+    <loc>https://mauriale.github.io/SitioWebDrone/info/telemetria-3d.html</loc>
+    <lastmod>2025-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://mauriale.github.io/SitioWebDrone/img/portfolio/telemetria-1.jpg</image:loc>
+      <image:caption>Telemetría y Modelado 3D</image:caption>
+    </image:image>
+  </url>
+  
+  <!-- Página de política de privacidad -->
+  <url>
+    <loc>https://mauriale.github.io/SitioWebDrone/politica-privacidad.html</loc>
+    <lastmod>2025-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <!-- Página de términos de servicio -->
+  <url>
+    <loc>https://mauriale.github.io/SitioWebDrone/terminos-servicio.html</loc>
+    <lastmod>2025-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <!-- Página offline -->
+  <url>
+    <loc>https://mauriale.github.io/SitioWebDrone/offline.html</loc>
+    <lastmod>2025-05-20</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.1</priority>
+  </url>
+</urlset>
