@@ -1,228 +1,109 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Este es un script básico que gestiona la ejecución de
+# un servidor HTTP simple para archivos estáticos.
+
 import os
 import sys
-import json
-import argparse
-import logging
 import subprocess
 import webbrowser
-import threading
 import time
-import socket
-from pathlib import Path
+import logging
 
-# Configurar logging
+# Configuración de logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-logger = logging.getLogger('MCP_Server')
 
-def is_port_in_use(port):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        return s.connect_ex(('localhost', port)) == 0
-
-def check_python_modules():
-    """Verifica que los módulos necesarios estén instalados"""
-    required_modules = ['flask', 'flask_cors', 'requests']
-    missing_modules = []
-    
-    for module in required_modules:
-        try:
-            __import__(module)
-        except ImportError:
-            missing_modules.append(module)
-    
-    if missing_modules:
-        logger.warning(f"Faltan módulos: {', '.join(missing_modules)}")
-        logger.info("Instalando módulos faltantes...")
-        try:
-            subprocess.check_call([sys.executable, "-m", "pip", "install"] + missing_modules)
-            logger.info("Módulos instalados correctamente")
-            return True
-        except subprocess.CalledProcessError:
-            logger.error("Error al instalar módulos")
-            return False
-    
-    return True
-
-def get_config(config_path):
-    """Obtiene la configuración del archivo o usa valores por defecto"""
-    default_config = {
-        "database": {
-            "path": "database/dronevista.db",
-            "backup_path": "data/backup"
-        },
-        "api": {
-            "port": 5000,
-            "debug": False,
-            "cors_origins": ["http://localhost:5001", "http://127.0.0.1:5001"]
-        },
-        "web": {
-            "port": 5001,
-            "debug": False
-        },
-        "maps": {
-            "api_key": "YOUR_GOOGLE_MAPS_API_KEY",
-            "proxy_enabled": True
-        }
-    }
-    
-    try:
-        if not os.path.exists(config_path):
-            # Crear directorios si no existen
-            os.makedirs(os.path.dirname(config_path), exist_ok=True)
-            
-            # Guardar configuración por defecto
-            with open(config_path, 'w', encoding='utf-8') as f:
-                json.dump(default_config, f, indent=4)
-            
-            logger.info(f"Archivo de configuración creado en {config_path}")
-            return default_config
-        
-        with open(config_path, 'r', encoding='utf-8') as f:
-            config = json.load(f)
-        
-        logger.info(f"Configuración cargada desde {config_path}")
-        return config
-    except Exception as e:
-        logger.error(f"Error al cargar configuración: {e}")
-        return default_config
-
-def start_api_server(config, debug=False):
-    """Inicia el servidor API"""
-    try:
-        # Verificar si el directorio api existe
-        if not os.path.exists('api'):
-            os.makedirs('api', exist_ok=True)
-            logger.info("Directorio api creado")
-        
-        # Verificar si booking_api.py y maps_proxy.py existen
-        api_files = {
-            'api/booking_api.py': 'https://raw.githubusercontent.com/mauriale/SitioWebDrone/main/api/booking_api.py',
-            'api/maps_proxy.py': 'https://raw.githubusercontent.com/mauriale/SitioWebDrone/main/api/maps_proxy.py'
-        }
-        
-        import_error = False
-        for file_path, url in api_files.items():
-            if not os.path.exists(file_path):
-                logger.warning(f"Archivo {file_path} no encontrado")
-                import_error = True
-        
-        # Si falta algún archivo, mejor no iniciar el API
-        if import_error:
-            logger.warning("No se iniciará el servidor API debido a archivos faltantes")
-            return None
-        
-        # Verifica si el puerto ya está en uso
-        api_port = config.get('api', {}).get('port', 5000)
-        if is_port_in_use(api_port):
-            logger.warning(f"Puerto {api_port} ya está en uso. Cambiando API a puerto {api_port+10}")
-            api_port += 10
-        
-        # Iniciar la API
-        api_cmd = [sys.executable, "api/booking_api.py"]
-        if debug:
-            os.environ['FLASK_DEBUG'] = '1'
-        
-        os.environ['PORT'] = str(api_port)
-        process = subprocess.Popen(api_cmd)
-        
-        logger.info(f"API iniciada con PID: {process.pid}")
-        return process
-    except Exception as e:
-        logger.error(f"Error al iniciar la API: {e}")
-        return None
-
-def start_static_server(config, debug=False):
-    """Inicia el servidor web estático"""
-    try:
-        # Verificar si el puerto ya está en uso
-        web_port = config.get('web', {}).get('port', 5001)
-        if is_port_in_use(web_port):
-            logger.warning(f"Puerto {web_port} ya está en uso. Cambiando web a puerto {web_port+10}")
-            web_port += 10
-        
-        # Usar el servidor HTTP simple de Python
-        os.chdir(os.path.dirname(os.path.abspath(__file__)))
-        
-        cmd = [sys.executable, "-m", "http.server", str(web_port)]
-        process = subprocess.Popen(cmd)
-        
-        logger.info(f"Servidor estático iniciado con PID: {process.pid}")
-        return process
-    except Exception as e:
-        logger.error(f"Error al iniciar el servidor estático: {e}")
-        return None
-
-def open_browser(url, delay=2):
-    """Abre el navegador después de un delay"""
-    def _open_browser():
-        time.sleep(delay)
-        webbrowser.open(url)
-    
-    threading.Thread(target=_open_browser).start()
+logger = logging.getLogger('SitioWebDrone')
 
 def main():
-    """Función principal"""
-    parser = argparse.ArgumentParser(description='Iniciar servidores SitioWebDrone')
-    parser.add_argument('-c', '--config', default='config/db_config.json', help='Ruta al archivo de configuración')
-    parser.add_argument('-d', '--debug', action='store_true', help='Activar modo debug')
-    parser.add_argument('-n', '--no-browser', action='store_true', help='No abrir navegador automáticamente')
-    args = parser.parse_args()
+    """Función principal para iniciar el servidor"""
     
-    # Verificar módulos Python necesarios
-    if not check_python_modules():
-        logger.error("No se pudieron instalar los módulos necesarios. Abortando.")
-        return 1
+    # Obtener el directorio actual
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    os.chdir(current_dir)
     
-    # Cargar configuración
-    config = get_config(args.config)
+    # Verificar si se desea el modo debug
+    debug_mode = "--debug" in sys.argv
+    if debug_mode:
+        logger.setLevel(logging.DEBUG)
+        logger.debug("Modo debug activado")
     
-    # Verificar base de datos
-    db_path = config.get('database', {}).get('path', 'database/dronevista.db')
-    if os.path.exists(db_path):
-        logger.info(f"Base de datos encontrada en {db_path}")
+    # Verificar directorios necesarios
+    required_dirs = ["logs", "data", "database", "api", "config"]
+    for directory in required_dirs:
+        if not os.path.exists(directory):
+            os.makedirs(directory, exist_ok=True)
+            logger.info(f"Directorio {directory} creado")
+    
+    # Verificar archivos API necesarios
+    if not os.path.exists("api/booking_api.py"):
+        logger.warning("Archivo api/booking_api.py no encontrado")
+        
+    if not os.path.exists("api/maps_proxy.py"):
+        logger.warning("Archivo api/maps_proxy.py no encontrado")
+    
+    # Iniciar servidor web estático
+    logger.info("Iniciando servidor web estático en puerto 5001...")
+    web_process = subprocess.Popen(
+        [sys.executable, "-m", "http.server", "5001"],
+        stdout=subprocess.PIPE, 
+        stderr=subprocess.PIPE
+    )
+    
+    # Iniciar API
+    logger.info("Iniciando API en puerto 5000...")
+    if os.path.exists("api/booking_api.py"):
+        env = os.environ.copy()
+        env["PORT"] = "5000"
+        if debug_mode:
+            env["FLASK_DEBUG"] = "1"
+            
+        api_process = subprocess.Popen(
+            [sys.executable, "api/booking_api.py"],
+            env=env,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
     else:
-        logger.warning(f"Base de datos no encontrada en {db_path}")
-        # La base de datos será creada por booking_api.py
+        api_process = None
+        logger.error("No se puede iniciar la API - archivo booking_api.py no encontrado")
     
-    # Iniciar servidores
-    logger.info(f"Iniciando API en localhost:{config.get('api', {}).get('port', 5000)}...")
-    api_process = start_api_server(config, args.debug)
+    # Abrir navegador
+    logger.info("Abriendo navegador...")
+    webbrowser.open("http://localhost:5001")
     
-    logger.info(f"Iniciando servidor estático en puerto {config.get('web', {}).get('port', 5001)}...")
-    web_process = start_static_server(config, args.debug)
-    
-    if api_process and web_process:
-        logger.info("Servidores iniciados correctamente")
+    # Mantener el servidor en ejecución
+    try:
+        logger.info("Servidor iniciado. Presiona Ctrl+C para detener.")
+        logger.info("API: http://localhost:5000/api")
+        logger.info("Web: http://localhost:5001")
         
-        web_port = config.get('web', {}).get('port', 5001)
-        api_port = config.get('api', {}).get('port', 5000)
+        # Mantener el proceso principal en ejecución
+        while True:
+            time.sleep(1)
+            
+            # Verificar que los procesos siguen en ejecución
+            if api_process and api_process.poll() is not None:
+                logger.error("La API se ha detenido inesperadamente")
+                break
+                
+            if web_process.poll() is not None:
+                logger.error("El servidor web se ha detenido inesperadamente")
+                break
+                
+    except KeyboardInterrupt:
+        logger.info("Deteniendo servidores...")
+    finally:
+        # Detener procesos
+        if api_process:
+            api_process.terminate()
+        web_process.terminate()
         
-        logger.info(f"API disponible en: http://localhost:{api_port}/api")
-        logger.info(f"Panel de administración disponible en: http://localhost:{web_port}/admin")
-        logger.info(f"Sitio web disponible en: http://localhost:{web_port}")
-        
-        # Abrir navegador
-        if not args.no_browser:
-            open_browser(f"http://localhost:{web_port}")
-        
-        # Mantener procesos en ejecución
-        try:
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            logger.info("Deteniendo servidores...")
-            if api_process:
-                api_process.terminate()
-            if web_process:
-                web_process.terminate()
-    else:
-        logger.error("Fallo al iniciar uno o más servidores")
-        return 1
+        logger.info("Servidores detenidos")
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
