@@ -1,0 +1,35 @@
+# robots.txt para SitioWebDrone
+User-agent: *
+Allow: /
+Disallow: /admin/
+
+# Evitar indexación de archivos duplicados o en desarrollo
+Disallow: /*.json$
+Disallow: /backups/
+Disallow: /logs/
+Disallow: /config/
+
+# Permitir a Mediapartners (AdSense) el acceso a todo el sitio
+User-agent: Mediapartners-Google
+Allow: /
+
+# Permitir a Googlebot-Image acceder a las imágenes
+User-agent: Googlebot-Image
+Allow: /img/
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.svg$
+Allow: /*.gif$
+Allow: /*.webp$
+
+# Permitir indexación de recursos en JS/CSS
+User-agent: Googlebot
+Allow: /*.js$
+Allow: /*.css$
+
+# Tiempo de espera entre peticiones
+Crawl-delay: 5
+
+# Sitemap
+Sitemap: https://mauriale.github.io/SitioWebDrone/sitemap.xml
