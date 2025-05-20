@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sin conexión - DroneVista</title>
+  <!-- Favicons para diferentes dispositivos -->
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    
+    body {
+      background-color: #121212;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      text-align: center;
+    }
+    
+    .offline-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 32px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+    
+    .drone-icon {
+      font-size: 72px;
+      margin-bottom: 30px;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    h1 {
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+    
+    p {
+      margin-bottom: 30px;
+      line-height: 1.6;
+      color: #e0e0e0;
+    }
+    
+    .retry-button {
+      display: inline-block;
+      background-color: #FF6B00;
+      color: white;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.1rem;
+      border-radius: 30px;
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      text-decoration: none;
+    }
+    
+    .retry-button:hover {
+      background-color: #FF8F3F;
+      transform: translateY(-3px);
+    }
+    
+    footer {
+      padding: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #cccccc;
+    }
+    
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="offline-content">
+    <div class="logo">DroneVista</div>
+    
+    <div class="drone-icon">🛸</div>
+    
+    <h1>Sin conexión a internet</h1>
+    
+    <p>No pudimos conectarnos a la red. Es posible que estés offline o que nuestro servidor no esté disponible en este momento.</p>
+    
+    <p>Algunas funciones de la aplicación están disponibles sin conexión, pero para acceder a todas las características necesitarás volver a conectarte.</p>
+    
+    <a href="/" class="retry-button">Intentar de nuevo</a>
+  </div>
+  
+  <footer>
+    <p>© 2025 DroneVista. Todos los derechos reservados.</p>
+  </footer>
+  
+  <script>
+    // Comprobar periódicamente si la conexión se ha restablecido
+    setInterval(() => {
+      fetch('/', { method: 'HEAD' })
+        .then(response => {
+          if (response.ok) {
+            // Si hay conexión, recargar la página
+            window.location.reload();
+          }
+        })
+        .catch(() => {
+          // Si sigue sin haber conexión, no hacer nada
+        });
+    }, 5000); // Comprobar cada 5 segundos
+    
+    // Evento de clic en el botón de reintento
+    document.querySelector('.retry-button').addEventListener('click', event => {
+      event.preventDefault();
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>
