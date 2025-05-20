@@ -161,6 +161,49 @@ La estructura de la base de datos incluye:
 - **Logs detallados:** Sistema de logging para detectar problemas
 - **Backups automáticos:** Respaldo de datos en archivos JSON
 
+## 📅 Plan de mejoras (2025)
+
+Se están implementando las siguientes mejoras en el sitio web:
+
+### Fase 1: Optimización y Rendimiento
+- ✅ Optimización de imágenes y video
+- ✅ Implementación de carga perezosa (lazy loading)
+- ✅ Minificación de CSS y JavaScript
+- ✅ Implementación de service worker para funcionalidad offline
+- ✅ Configuración de HTTPS
+
+### Fase 2: Diseño y Experiencia de Usuario
+- ✅ Sistema de diseño con variables CSS
+- ✅ Mejora del formulario con validación en tiempo real
+- ✅ Navegación mejorada con indicadores de sección activa
+- ✅ Botón "volver arriba" para mejor navegación
+- ✅ Optimizaciones específicas para dispositivos móviles
+
+### Fase 3: Características Adicionales
+- ⏳ Galería de proyectos anteriores
+- ⏳ Sistema de reseñas de clientes
+- ⏳ Blog con consejos y novedades
+- ⏳ Soporte para múltiples idiomas (español/inglés)
+
+### Fase 4: Características Avanzadas
+- ⏳ Visualización 3D de modelos para telemetría
+- ⏳ Chat en vivo para atención al cliente
+- ⏳ Sistema de pagos mejorado (múltiples opciones)
+- ⏳ Implementación PWA (Progressive Web App)
+
+## 🔄 Puntos de Respaldo
+
+Para facilitar la continuación del desarrollo en caso de interrupciones, se han establecido los siguientes puntos de respaldo:
+
+1. **Base-v1.0**: Versión original antes de las mejoras
+2. **Mejora-v1.1**: Optimización de imágenes y rendimiento básico
+3. **Mejora-v1.2**: Implementación de service worker y funcionalidad offline
+4. **Mejora-v1.3**: Sistema de diseño y variables CSS
+5. **Mejora-v1.4**: Mejoras de formulario y validación
+6. **Mejora-v1.5**: Optimizaciones para móviles y navegación mejorada
+7. **Mejora-v1.6**: Implementación de galería y portfolio
+8. **Mejora-v1.7**: Implementación de testimonios y reseñas
+
 ## 📄 Licencia
 
 [MIT License](LICENSE)
