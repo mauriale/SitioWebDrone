@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DroneVista - Demo Video Backgrounds</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        .video-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            background: #000;
+        }
+        
+        .video-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 1s ease-in-out;
+        }
+        
+        .video-background.fade-out {
+            opacity: 0;
+        }
+        
+        .content {
+            position: relative;
+            min-height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+        
+        .service-selector {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .service-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .service-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+        
+        .service-card.active {
+            border-color: #FF6B00;
+            background: rgba(255, 107, 0, 0.2);
+        }
+        
+        .service-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .service-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .service-description {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .video-info {
+            max-width: 800px;
+            margin: 40px auto;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .video-status {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .status-label {
+            font-weight: bold;
+            color: #FF6B00;
+        }
+        
+        .upload-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .upload-btn {
+            background: #FF6B00;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+        
+        .upload-btn:hover {
+            background: #FF8F3F;
+        }
+        
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            color: #FF6B00;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 5px;
+        }
+        
+        .default-service {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .default-btn {
+            background: #4A90E2;
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+        }
+        
+        .default-btn:hover {
+            background: #5BA0F2;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <video id="bgVideo" class="video-background" autoplay muted loop playsinline>
+            <source id="videoSource" src="tu-video-drone.mp4" type="video/mp4">
+        </video>
+    </div>
+    
+    <div class="content">
+        <h1>DroneVista - Video Backgrounds Demo</h1>
+        
+        <div class="default-service">
+            <button class="default-btn" onclick="loadDefaultVideo()">Cargar Video Principal</button>
+        </div>
+        
+        <h2 style="text-align: center; margin-bottom: 20px;">Selecciona un Servicio para ver su Video</h2>
+        
+        <div class="service-selector">
+            <div class="service-card" onclick="changeVideo('montana')">
+                <div class="service-icon">🏔️</div>
+                <div class="service-name">Filmación en Montaña</div>
+                <div class="service-description">Paisajes montañosos espectaculares</div>
+            </div>
+            
+            <div class="service-card" onclick="changeVideo('playa')">
+                <div class="service-icon">🏖️</div>
+                <div class="service-name">Filmación en Playa</div>
+                <div class="service-description">Vistas aéreas de costas</div>
+            </div>
+            
+            <div class="service-card" onclick="changeVideo('produccion')">
+                <div class="service-icon">🎬</div>
+                <div class="service-name">Producción Audiovisual</div>
+                <div class="service-description">Servicios profesionales completos</div>
+            </div>
+            
+            <div class="service-card" onclick="changeVideo('corporativo')">
+                <div class="service-icon">🏢</div>
+                <div class="service-name">Servicios Corporativos</div>
+                <div class="service-description">Eventos y proyectos empresariales</div>
+            </div>
+            
+            <div class="service-card" onclick="changeVideo('telemetria')">
+                <div class="service-icon">📊</div>
+                <div class="service-name">Telemetría 3D</div>
+                <div class="service-description">Modelado y digitalización</div>
+            </div>
+        </div>
+        
+        <div class="video-info">
+            <h3>Estado del Video</h3>
+            <div class="video-status">
+                <span class="status-label">Video Actual:</span>
+                <span id="currentVideo">tu-video-drone.mp4</span>
+                
+                <span class="status-label">Estado:</span>
+                <span id="videoStatus">Cargando...</span>
+                
+                <span class="status-label">Duración:</span>
+                <span id="videoDuration">-</span>
+                
+                <span class="status-label">Resolución:</span>
+                <span id="videoResolution">-</span>
+                
+                <span class="status-label">Archivo Existe:</span>
+                <span id="fileExists">Verificando...</span>
+            </div>
+            
+            <div class="upload-section">
+                <h3>Subir Videos para cada Servicio</h3>
+                <p>Los videos deben estar en la carpeta <code>videos/</code> con estos nombres:</p>
+                <ul>
+                    <li><code>montana-bg.mp4</code> - Video para Filmación en Montaña</li>
+                    <li><code>playa-bg.mp4</code> - Video para Filmación en Playa</li>
+                    <li><code>produccion-bg.mp4</code> - Video para Producción Audiovisual</li>
+                    <li><code>corporativo-bg.mp4</code> - Video para Servicios Corporativos</li>
+                    <li><code>telemetria-bg.mp4</code> - Video para Telemetría 3D</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Especificaciones de Video Recomendadas</h3>
+            <ul>
+                <li><strong>Formato:</strong> MP4 (codec H.264)</li>
+                <li><strong>Resolución:</strong> 1920x1080 (Full HD) o 3840x2160 (4K)</li>
+                <li><strong>Duración:</strong> 15-30 segundos (loop continuo)</li>
+                <li><strong>Bitrate:</strong> 8-15 Mbps para Full HD</li>
+                <li><strong>Sin audio</strong> (los videos se reproducen mudos)</li>
+            </ul>
+            
+            <h3 style="margin-top: 20px;">🎥 Comando FFmpeg para Optimizar</h3>
+            <code style="display: block; background: #000; padding: 10px; margin-top: 10px; border-radius: 5px;">
+                ffmpeg -i input.mp4 -c:v libx264 -preset slow -crf 22 -movflags +faststart -an output.mp4
+            </code>
+        </div>
+    </div>
+    
+    <script>
+        const video = document.getElementById('bgVideo');
+        const videoSource = document.getElementById('videoSource');
+        const currentVideoSpan = document.getElementById('currentVideo');
+        const statusSpan = document.getElementById('videoStatus');
+        const durationSpan = document.getElementById('videoDuration');
+        const resolutionSpan = document.getElementById('videoResolution');
+        const fileExistsSpan = document.getElementById('fileExists');
+        
+        const videos = {
+            'montana': 'videos/montana-bg.mp4',
+            'playa': 'videos/playa-bg.mp4',
+            'produccion': 'videos/produccion-bg.mp4',
+            'corporativo': 'videos/corporativo-bg.mp4',
+            'telemetria': 'videos/telemetria-bg.mp4',
+            'default': 'tu-video-drone.mp4'
+        };
+        
+        // Video event listeners
+        video.addEventListener('loadstart', () => {
+            statusSpan.textContent = 'Iniciando carga...';
+        });
+        
+        video.addEventListener('loadedmetadata', () => {
+            statusSpan.textContent = 'Metadata cargada';
+            durationSpan.textContent = Math.round(video.duration) + ' segundos';
+            resolutionSpan.textContent = video.videoWidth + 'x' + video.videoHeight;
+        });
+        
+        video.addEventListener('canplay', () => {
+            statusSpan.textContent = 'Listo para reproducir';
+        });
+        
+        video.addEventListener('playing', () => {
+            statusSpan.textContent = 'Reproduciendo';
+        });
+        
+        video.addEventListener('error', (e) => {
+            statusSpan.textContent = 'Error: ' + (video.error ? video.error.message : 'Desconocido');
+            fileExistsSpan.textContent = 'No encontrado';
+            fileExistsSpan.style.color = '#ff4444';
+        });
+        
+        function changeVideo(service) {
+            const videoPath = videos[service];
+            
+            // Update active card
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Fade out current video
+            video.classList.add('fade-out');
+            
+            setTimeout(() => {
+                // Change video source
+                videoSource.src = videoPath;
+                currentVideoSpan.textContent = videoPath;
+                fileExistsSpan.textContent = 'Verificando...';
+                fileExistsSpan.style.color = '#FFF';
+                
+                // Load new video
+                video.load();
+                video.play().then(() => {
+                    fileExistsSpan.textContent = 'Sí';
+                    fileExistsSpan.style.color = '#4CAF50';
+                }).catch(err => {
+                    console.error('Error playing video:', err);
+                    fileExistsSpan.textContent = 'No encontrado';
+                    fileExistsSpan.style.color = '#ff4444';
+                });
+                
+                // Fade in new video
+                video.classList.remove('fade-out');
+            }, 500);
+        }
+        
+        function loadDefaultVideo() {
+            // Remove active class from all cards
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.classList.remove('active');
+            });
+            
+            // Change to default video
+            videoSource.src = videos.default;
+            currentVideoSpan.textContent = videos.default;
+            video.load();
+            video.play();
+        }
+        
+        // Check default video on load
+        video.play().then(() => {
+            fileExistsSpan.textContent = 'Sí';
+            fileExistsSpan.style.color = '#4CAF50';
+        }).catch(err => {
+            fileExistsSpan.textContent = 'Error al reproducir';
+            fileExistsSpan.style.color = '#ff4444';
+        });
+    </script>
+</body>
+</html>
